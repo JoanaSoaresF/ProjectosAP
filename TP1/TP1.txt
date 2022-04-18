@@ -20,11 +20,20 @@ PERGUNTAS/QUESTIONS:
 Q1: Explain the architecture of your best model for the multiclass classification problem, including a description and justification of the output activation and loss functions. Also justify your choice of layers and activation functions for the hidden layers.
 Q1; Explique a arquitectura do seu melhor modelo para o problema de classificação de multi-classe, incluindo uma descrição e justificação das funções de activação à saída da rede e função de custo. Justifique também a sua escolha de camadas e de funções de activação para as camadas escondidas.
 R1:
+Convolutional neural networks são largamente usadas para reconhecimento e classificação de imagens, permitindo alcançar excelentes resultados nestes objetivos. Por esse motivo escolhemos implementar uma CNN para o problema da multiclass classification.
+Utilizamos a função de ativação "Relu" para as diferentes camadas dados que esta permite evitar problemas como vanishing gradientes, que ocorrem em funções de activação como a sigmoid. Para além disso, a "Relu" também permite um treino mais rápido. Avaliamos com outras variantes da Relu mas a versão normal foi a que produziu melhores resultados, possivelmente porque o nosso modelo não era afetado pelo problema do dying ReLU.
 
 
 Q2: Discuss and explain how you selected the best model for the multiclass classifcation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained.
-Q2: Discuta e explique como seleccionou o melhor modelo para o problema de classificação multi-classe, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos.
+Q2: Discuta e explique como selecionou o melhor modelo para o problema de classificação multi-classe, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos.
 R2:
+Para selecionarmos o melhor modelo fizemos uma série de experiências com diferentes arquiteturas, experimentando modelos com mais e menos convolutional layers, alterando o número de filtros e o tamanho do kernel utilizado, adicionando e removendo layers de Dropout e BatchNormalization e experimentando com diferentes otimizadores.
+Para otimizadores o SDG, com diferentes valores para o momentum e learning rate e o Adam, com os valores default. Obtivemos sempre melhores resultados, bem como um treino mais rápido com o otimizador Adam pelo que o escolhemos no nosso modelo final.
+Em relação aos parâmetros como o número de cada tipo de camada, ao tamanho do kernel a usar e o número de filtros, realizados diferentes experiências e escolhemos a melhor avaliando o erro de validação obtido com cada modelo.
+Experimentamos o modelo com e sem BatchNormalization entre as diferentes camadas mas não obtivemos bons resultados. A batch normalization permite fazer re-centering e re-scaling dos inputs das diferentes camadas permitindo que a rede fique mais estável
+Avaliamos, por fim, o uso de camadas Dropout: verificamos que a presença destas camadas depois da normalização de uma dense layer permitiu diminuir as diferenças entre o erro de treino e o erro de validação. Podemos concluir assim que o Dropout serve como regularização e permite diminuir o erro de generalização, evitando o overfitting. //TODO
+Tentamos também uma arquitetura com Residual blocks, que que o input é copiado para o output, mas não obtivemos bons resultados pelo que descartamos este modelo.
+
 
 
 Q3: For the multilabel classification problem, explain how you adpated your previous model, what experiments you did to optimize the architecture and discuss your results. Do not forget to explain your choice of activation and loss functions and why this model differs from the previous one.
