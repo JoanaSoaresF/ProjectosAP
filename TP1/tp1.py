@@ -7,12 +7,14 @@
 #  Gonçalo Martins Lourenço nº55780
 #  Joana Soares Faria nº55754
 # ##############################################################################
-from keras.callbacks import TensorBoard
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.optimizers import Adam
 
-from multiclass_models import train_multiclass_model
 import tp1_utils as util
+from TP1.multilabel_models import train_multilabel_model
+from multiclass_models import train_multiclass_model
+
+PROBLEM_MULTICLASS = 0
+PROBLEM_MULTILABEL = 1
+PROBLEM_SEGMENTATION = 2
 
 
 # tensorboard --logdir logs
@@ -24,20 +26,16 @@ def normalization(X):
     return X
 
 
-def main():
+def main(problem):
     data = util.load_data()
     train_X = normalization(data['train_X'])
     train_classes = data['train_classes']
     testX = normalization(data['test_X'])
     test_classes = data['test_classes']
-    model = train_multiclass_model(train_X, train_classes)
-    multiclass_eval = model.evaluate(testX, test_classes)
-    print(f'Multiclass accuracy: {multiclass_eval[1]}; Multiclass loss: {multiclass_eval[0]}')
-    print(multiclass_eval)
-    """
-    Multiclass accuracy: 0.9879999756813049; Multiclass loss: 0.035707972943782806
-    [0.035707972943782806, 0.9879999756813049]
-    """
+    if problem == PROBLEM_MULTICLASS:
+        train_multiclass_model(train_X, train_classes, testX, test_classes)
+    elif problem == PROBLEM_MULTILABEL:
+        train_multilabel_model(train_X, train_classes, testX, test_classes)
 
 
-main()
+main(PROBLEM_MULTICLASS)

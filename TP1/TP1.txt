@@ -22,7 +22,15 @@ Q1; Explique a arquitectura do seu melhor modelo para o problema de classificaç
 R1:
 Convolutional neural networks são largamente usadas para reconhecimento e classificação de imagens, permitindo alcançar excelentes resultados nestes objetivos. Por esse motivo escolhemos implementar uma CNN para o problema da multiclass classification.
 Utilizamos a função de ativação "Relu" para as diferentes camadas dados que esta permite evitar problemas como vanishing gradientes, que ocorrem em funções de activação como a sigmoid. Para além disso, a "Relu" também permite um treino mais rápido. Avaliamos com outras variantes da Relu mas a versão normal foi a que produziu melhores resultados, possivelmente porque o nosso modelo não era afetado pelo problema do dying ReLU.
+O nosso modelo tem os seguintes componentes:
+    1. Uma primeira parte constituída por três blocos com convolutional layers, com 64, 32 e 16 filtros e um kernel (3,3). Estes blocos são constituídos por um stack de duas convolutional layers, com função de ativação Relu e com bath normalization entre elas e terminando com uma camada de MaxPolling.
+    2. Após os blocos com convolutional layers fazemos flatten do seu output para que este seja passado adequadamente às Dense layers seguintes.
+    3. seguidamente temos 3 dense blocos de 264, 128 e 64 neurónios. Estes blocos são constituídos por uma dense layer com função de ativação Relu, por batch normalization e terminam com uma camada de dropout
+    4. Por fim temos a última camada, para output, com 10 neurónios e função de ativação softmax. São 10 neurónios visto que temos 10 classes a que o pokemon na imagem pode pertencer.
 
+O uso da função de activação softmax aplica-se a problemas de classificação em que cada exemplo pode pertencer a uma, e apenas uma das classe, sendo que a função expressão a probabilidade de cada exemplo pertencer a cada classe. Sendo assim podemos concluir a classe prevista pela rede analisando a classe com maior probabilidade. É assim a função de ativação mais adequada para este primeiro problema.
+
+Para a loss function escolhemos categorical_crossentropy dado que é uma loss function que se aplica o problemas de classificação multiclasse, que é o que estamos a avaliar: a qual das 10 classes existentes pertence cada exemplo.
 
 Q2: Discuss and explain how you selected the best model for the multiclass classifcation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained.
 Q2: Discuta e explique como selecionou o melhor modelo para o problema de classificação multi-classe, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos.
@@ -30,10 +38,13 @@ R2:
 Para selecionarmos o melhor modelo fizemos uma série de experiências com diferentes arquiteturas, experimentando modelos com mais e menos convolutional layers, alterando o número de filtros e o tamanho do kernel utilizado, adicionando e removendo layers de Dropout e BatchNormalization e experimentando com diferentes otimizadores.
 Para otimizadores o SDG, com diferentes valores para o momentum e learning rate e o Adam, com os valores default. Obtivemos sempre melhores resultados, bem como um treino mais rápido com o otimizador Adam pelo que o escolhemos no nosso modelo final.
 Em relação aos parâmetros como o número de cada tipo de camada, ao tamanho do kernel a usar e o número de filtros, realizados diferentes experiências e escolhemos a melhor avaliando o erro de validação obtido com cada modelo.
-Experimentamos o modelo com e sem BatchNormalization entre as diferentes camadas mas não obtivemos bons resultados. A batch normalization permite fazer re-centering e re-scaling dos inputs das diferentes camadas permitindo que a rede fique mais estável
-Avaliamos, por fim, o uso de camadas Dropout: verificamos que a presença destas camadas depois da normalização de uma dense layer permitiu diminuir as diferenças entre o erro de treino e o erro de validação. Podemos concluir assim que o Dropout serve como regularização e permite diminuir o erro de generalização, evitando o overfitting. //TODO
+Experimentamos o modelo com e sem BatchNormalization entre as diferentes camadas mas não obtivemos bons resultados. A batch normalization permite fazer re-centering e re-scaling dos inputs das diferentes camadas permitindo que a rede fique mais estável.
+Optamos por utilizar camadas de dropout após as dense layers como forma de regularização, evitando o overfitting
 Tentamos também uma arquitetura com Residual blocks, que que o input é copiado para o output, mas não obtivemos bons resultados pelo que descartamos este modelo.
-
+Sempre que com modelos diferentes obtínhamos resultados semelhante escolhemos o modelo mais simples, com o menor número de parâmetros. Isto porque modelos mais simples são mais fáceis de treinar e porque modelos complexos podem dificultar a generalização.
+A avaliação dos modelos foi feita através do erro de validação e da accuracy medida com os dados de validação. Os modelos que apresentavam piores valores foram descartados.
+O modelo selecionado permitiu-nos obter excelentes resultados no teste de treino: Multiclass accuracy: 1.0; Multiclass loss: 0.000170357248862274.
+Na imagem images/multiclass-accuracy-best-model.png podemos observar a evolução durante o treino da accuracy de treino e validação, e no ficheiro images/multiclass-loss-best-model.png a evolução da loss, para o modelo selecionado.
 
 
 Q3: For the multilabel classification problem, explain how you adpated your previous model, what experiments you did to optimize the architecture and discuss your results. Do not forget to explain your choice of activation and loss functions and why this model differs from the previous one.

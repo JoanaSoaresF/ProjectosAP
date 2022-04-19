@@ -7,9 +7,9 @@ Auxiliary functions
 
 """
 
-from skimage.io import imsave
 import numpy as np
 import pandas as pd
+from skimage.io import imsave
 from tensorflow.keras.utils import to_categorical
 
 
@@ -97,14 +97,14 @@ def load_data():
     secondary_ixs = table['secondary_type_index'][mask].values.astype(int)
     labels[tuple((rows, secondary_ixs))] = 1
 
-    return {'train_X': data['images'][:4000],
-            'test_X': data['images'][4000:],
-            'train_masks': data['masks'][:4000],
-            'test_masks': data['masks'][4000:],
+    return {'train_X'      : data['images'][:4000],
+            'test_X'       : data['images'][4000:],
+            'train_masks'  : data['masks'][:4000],
+            'test_masks'   : data['masks'][4000:],
             'train_classes': classes[:4000],
-            'train_labels': labels[:4000],
-            'test_classes': classes[4000:],
-            'test_labels': labels[4000:], }
+            'train_labels' : labels[:4000],
+            'test_classes' : classes[4000:],
+            'test_labels'  : labels[4000:], }
 
 
 if __name__ == '__main__':
