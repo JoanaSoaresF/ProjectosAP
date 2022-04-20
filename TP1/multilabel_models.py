@@ -14,10 +14,9 @@ from tensorflow.keras.optimizers import Adam
 
 from TP1.multiclass_models import convolution_stack_layer, dense_block
 
-now = datetime.utcnow().strftime("%Y-%m-%d-%H-%M-%S")
 root_logdir = "logs"
 pesos_dir = "pesos"
-log_dir = "{}/Multilabel-{}/".format(root_logdir, now)
+# log_dir = "{}/Multilabel-{}/".format(root_logdir, now)
 
 
 def create_multilabel_model(input_shape):
@@ -51,11 +50,12 @@ def create_multilabel_model(input_shape):
     return Model(inputs, output)
 
 
-def train_multilabel_model(X, Y, test_x, test_labels, load_weigths):
+def train_multilabel_model(X, Y, test_x, test_labels, now, load_weights):
     """
     Train of the model previously created
     Args:
-        load_weights:
+        load_weights: boolean to indicate if it is to load weights from previous moddel
+        now:
         X: features for the trains
         Y: classes for the train
         test_labels: labels of the test set
@@ -64,6 +64,8 @@ def train_multilabel_model(X, Y, test_x, test_labels, load_weigths):
     Returns: the model trained
 
     """
+    log_dir = "{}/Multilabel-{}/".format(root_logdir, now)
+
     trainX, valX, trainY, valY = train_test_split(X, Y, train_size=3500, test_size=500)
     tb_callback = TensorBoard(log_dir=log_dir, write_graph=True, write_images=True, profile_batch=0)
     model = create_multilabel_model((64, 64, 3))
@@ -75,7 +77,7 @@ def train_multilabel_model(X, Y, test_x, test_labels, load_weigths):
                   metrics=["binary_accuracy"])
     model.summary()
 
-    if load_weigths:
+    if load_weights:
         model.load_weights('pesos/multiclass-best_model.h5')
         multilabel_eval = model.evaluate(X, Y)
         print(f'Multilabel accuracy: {multilabel_eval[1]}; Multilabel loss: {multilabel_eval[0]}')

@@ -38,7 +38,7 @@ R2:
 Para selecionarmos o melhor modelo fizemos uma série de experiências com diferentes arquiteturas, experimentando modelos com mais e menos convolutional layers, alterando o número de filtros e o tamanho do kernel utilizado, adicionando e removendo layers de Dropout e BatchNormalization e experimentando com diferentes otimizadores.
 Para otimizadores o SDG, com diferentes valores para o momentum e learning rate e o Adam, com os valores default. Obtivemos sempre melhores resultados, bem como um treino mais rápido com o otimizador Adam pelo que o escolhemos no nosso modelo final.
 Em relação aos parâmetros como o número de cada tipo de camada, ao tamanho do kernel a usar e o número de filtros, realizados diferentes experiências e escolhemos a melhor avaliando o erro de validação obtido com cada modelo.
-Experimentamos o modelo com e sem BatchNormalization entre as diferentes camadas mas não obtivemos bons resultados. A batch normalization permite fazer re-centering e re-scaling dos inputs das diferentes camadas permitindo que a rede fique mais estável.
+Experimentamos o modelo com e sem BatchNormalization entre as diferentes camadas mas não obtivemos bons resultados. A batch normalization permite fazer re-centering e re-scaling dos inputs das diferentes camadas permitindo que a rede fique mais estável, previne valores extremos e reduz a necessidade de cada camada de adaptar às mudanças na camada anterior.
 Optamos por utilizar camadas de dropout após as dense layers como forma de regularização, evitando o overfitting
 Tentamos também uma arquitetura com Residual blocks, que que o input é copiado para o output, mas não obtivemos bons resultados pelo que descartamos este modelo.
 Sempre que com modelos diferentes obtínhamos resultados semelhante escolhemos o modelo mais simples, com o menor número de parâmetros. Isto porque modelos mais simples são mais fáceis de treinar e porque modelos complexos podem dificultar a generalização.
@@ -65,11 +65,17 @@ Na imagem images/multilabel_best_model_accuracy.png podemos observar a evoluçã
 Q4: Explain the architecture of your best model for the semantic segmentation problem, including a description and justification of the output activation and loss functions. Also justify your choice of layers and activation functions for the hidden layers.
 Q4: Explique a arquitectura do seu melhor modelo para o problema de segmentação semântica, incluindo uma descrição e justificação das funções de activação à saída da rede e função de custo. Justifique também a sua escolha de camadas e de funções de activação para as camadas escondidas.
 R4:
-
+//TODO
 
 Q5: Discuss and explain how you selected the best model for the semantic segmentation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained. Use the auxiliary functions provided to show the correspondence between your predicted segmentation masks and the masks provided in the test set.
 Q5: Discuta e explique como seleccionou o melhor modelo para o problema de segmentação semântica, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos. Use as funções auxiliares fornecidas para mostrar a correspondência entre as máscaras de segmentação previstas e as máscaras no conjunto de teste.
 R5:
+Experimentamos dois tipos de arquiteturas: Fully Convolutional Network e U-net. Observamos que obtínhamos melhores resultados com arquiteturas do tipo U-net pelo que foi o que escolhemos. Podemos ver a diferenças de performance nas imagens: images/segmentation_FCN_vs_u-net_accuracy.png e
+ images/segmentation_FCN_vs_u-net_loss.png. Implementamos uma arquitetura muito simples baseada na U-net.
+Avaliamos a performance dos diversos modelos avaliando a accuracy e a loss no conjunto de validação e selecionando os com melhores valores.x De entre modelos com performances semelhantes escolhemos sempre o modelo mais simples, com o menor número de parâmetros para treinar. Sendo assim acabados com o modelo muito simples descrito anteriormente.
+Nas figuras images/segmentation_best_model_accuracy.png e images/segmentation_best_model_loss.png podemos ver a performance do nosso modelo.
+Nas figuras images/segmentation_test_compare.png e images/segmentation_test_overlay.png podemos ter uma noção mais intuitiva das máscaras criadas pelo nosso modelo, comparativamente às máscaras esperadas e às imagens dadas.
+//TODO
 
 
 Q6: (Optional) Discuss the impact on training and overfitting for the two classification problems when using available networks pretrained on ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explain how you used these networks and discuss the effect they had relative to your models.
