@@ -50,6 +50,16 @@ Na imagem images/multiclass-accuracy-best-model.png podemos observar a evoluçã
 Q3: For the multilabel classification problem, explain how you adpated your previous model, what experiments you did to optimize the architecture and discuss your results. Do not forget to explain your choice of activation and loss functions and why this model differs from the previous one.
 Q3: Para o problema de classificação com múltiplas etiquetas, explique como adaptou o modelo anterior, que experiências fez para optimizar a arquitectura e discuta os resultados. Não se esqueça de explicar a escolha de funções de activação e custo e porque é que este modelo difere do anterior.
 R3:
+Dada a semelhança do problema de classificação com múltiplas etiquetas com o problema anterior decidimos manter o mesmo modelo que para o problema anterior, dado que obteu excelentes resultados.
+Apesar das semelhanças entre od dois problemas foram necessárias algumas alterações para garantir a adequação do modelo ao novo problema:
+    1. Primeiro foi alterada a função de ativação da última dense layer, a camada de output, para sigmoid. A função softmax já não se adequa a este problema dado que a soma das probabilidades de pertencer às diferentes classes é 1, adequando-se a problemas em que os exemplos pertencem apenas a uma classe. Já a função sigmoid pode ser aplicada quando o exemplo pode pertencer a mais que uma classe, dando-nos a probabilidade de cada pokemon pertencer a cada classe.
+    2. A segunda alteração foi a loss function para binary_crossentropy, por motivos semelhantes aos anteriores: dado que o pokemon pode pertencer a mais que uma classe queremos que a loss seja calculada para cada classe individualmente.
+    3. Finalmente, para avaliar a accuracy escolhemos binary_accuracy em detrimento da categorical_accuracy, pelos mesmos motivos apresentados anteriormente.
+Tentamos duas abordagens: primeiro tentamos carregar na rede os pesos previamente obtidos (pesos/multiclass-best_model.h5) e obtivemos os seguintes resultados:
+    1. Nos dados destinados ao treino: Multilabel accuracy: 0.7336248159408569; Multilabel loss: 0.5656331181526184
+    2. Nos dados reservados para teste: Multilabel accuracy: 0.7408000230789185; Multilabel loss: 0.5622454881668091
+Dado que os resultados não foram tão bons como os demonstrados no problema anterior decidimos treinar o modelo e obtivemos os seguintes resultados no conjunto de teste: Multilabel accuracy: 1.0; Multilabel loss: 0.0005157431005500257
+Na imagem images/multilabel_best_model_accuracy.png podemos observar a evolução da accuracy no treino e validação do problema de multilabel e na imagem images/multilabel_best_model_loss.png podemos observar a evolução da loss function.
 
 
 Q4: Explain the architecture of your best model for the semantic segmentation problem, including a description and justification of the output activation and loss functions. Also justify your choice of layers and activation functions for the hidden layers.

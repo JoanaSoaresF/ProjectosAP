@@ -51,13 +51,14 @@ def create_multilabel_model(input_shape):
     return Model(inputs, output)
 
 
-def train_multilabel_model(X, Y, test_x, test_classes):
+def train_multilabel_model(X, Y, test_x, test_labels, load_weigths):
     """
     Train of the model previously created
     Args:
+        load_weights:
         X: features for the trains
         Y: classes for the train
-        test_classes: classes of the teste set
+        test_labels: labels of the test set
         test_x: imagens of the test set
 
     Returns: the model trained
@@ -71,19 +72,22 @@ def train_multilabel_model(X, Y, test_x, test_classes):
 
     model.compile(loss="binary_crossentropy",
                   optimizer=opt,
-                  metrics=["accuracy"])
+                  metrics=["binary_accuracy"])
     model.summary()
 
-    # model.fit(trainX, trainY,
-    #           validation_data=(valX, valY),
-    #           batch_size=32,
-    #           epochs=100,
-    #           callbacks=[tb_callback])
-    # model.save_weights("{}/Multilabel-{}/".format(pesos_dir, now))
+    if load_weigths:
+        model.load_weights('pesos/multiclass-best_model.h5')
+        multilabel_eval = model.evaluate(X, Y)
+        print(f'Multilabel accuracy: {multilabel_eval[1]}; Multilabel loss: {multilabel_eval[0]}')
+    else:
+        model.fit(trainX, trainY,
+                  validation_data=(valX, valY),
+                  batch_size=32,
+                  epochs=100,
+                  callbacks=[tb_callback])
+        model.save_weights("{}/Multilabel-{}/".format(pesos_dir, now))
 
-    model.load_weights('pesos/multiclass-best_model.h5')
-
-    multilabel_eval = model.evaluate(test_x, test_classes)
-    print(f'Multilabel accuracy: {multilabel_eval[1]}; Multiclass loss: {multilabel_eval[0]}')
+    multilabel_eval = model.evaluate(test_x, test_labels)
+    print(f'Multilabel accuracy: {multilabel_eval[1]}; Multilabel loss: {multilabel_eval[0]}')
 
     return model

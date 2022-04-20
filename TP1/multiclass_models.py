@@ -117,7 +117,7 @@ def train_multiclass_model(X, Y, test_x, test_classes):
 
     model.compile(loss="categorical_crossentropy",
                   optimizer=opt,
-                  metrics=["accuracy"])
+                  metrics=["categorical_accuracy"])
     model.summary()
 
     # model.fit(trainX, trainY,

@@ -30,12 +30,14 @@ def main(problem):
     data = util.load_data()
     train_X = normalization(data['train_X'])
     train_classes = data['train_classes']
+    train_labels = data['train_labels']
     testX = normalization(data['test_X'])
     test_classes = data['test_classes']
+    test_labels = data['test_labels']
     if problem == PROBLEM_MULTICLASS:
         train_multiclass_model(train_X, train_classes, testX, test_classes)
     elif problem == PROBLEM_MULTILABEL:
-        train_multilabel_model(train_X, train_classes, testX, test_classes)
+        train_multilabel_model(train_X, train_labels, testX, test_labels)
 
 
-main(PROBLEM_MULTICLASS)
+main(PROBLEM_MULTILABEL)
