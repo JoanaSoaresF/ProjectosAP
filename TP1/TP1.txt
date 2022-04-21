@@ -20,7 +20,7 @@ PERGUNTAS/QUESTIONS:
 Q1: Explain the architecture of your best model for the multiclass classification problem, including a description and justification of the output activation and loss functions. Also justify your choice of layers and activation functions for the hidden layers.
 Q1; Explique a arquitectura do seu melhor modelo para o problema de classificação de multi-classe, incluindo uma descrição e justificação das funções de activação à saída da rede e função de custo. Justifique também a sua escolha de camadas e de funções de activação para as camadas escondidas.
 R1:
-Convolutional neural networks são largamente usadas para reconhecimento e classificação de imagens, permitindo alcançar excelentes resultados nestes objetivos. Por esse motivo escolhemos implementar uma CNN para o problema da multiclass classification.
+Convolutional neural networks são largamente usadas para reconhecimento e classificação de imagens, permitindo alcançar excelentes resultados nestes objetivos. Por esse motivo escolhemos implementar uma CNN para o problema da multiclass classification. Isto porque estas redes permitem utilização de menos parâmetros. Apesar de conecções mais esparsas os parâmetros são partilhados pelos vários inputs.
 Utilizamos a função de ativação "Relu" para as diferentes camadas dados que esta permite evitar problemas como vanishing gradientes, que ocorrem em funções de activação como a sigmoid. Para além disso, a "Relu" também permite um treino mais rápido. Avaliamos com outras variantes da Relu mas a versão normal foi a que produziu melhores resultados, possivelmente porque o nosso modelo não era afetado pelo problema do dying ReLU.
 O nosso modelo tem os seguintes componentes:
     1. Uma primeira parte constituída por três blocos com convolutional layers, com 64, 32 e 16 filtros e um kernel (3,3). Estes blocos são constituídos por um stack de duas convolutional layers, com função de ativação Relu e com bath normalization entre elas e terminando com uma camada de MaxPolling.
@@ -65,7 +65,18 @@ Na imagem images/multilabel_best_model_accuracy.png podemos observar a evoluçã
 Q4: Explain the architecture of your best model for the semantic segmentation problem, including a description and justification of the output activation and loss functions. Also justify your choice of layers and activation functions for the hidden layers.
 Q4: Explique a arquitectura do seu melhor modelo para o problema de segmentação semântica, incluindo uma descrição e justificação das funções de activação à saída da rede e função de custo. Justifique também a sua escolha de camadas e de funções de activação para as camadas escondidas.
 R4:
-//TODO
+Escolhemos implementar uma rede com convolutional layers devido às propriedades que mencionamos anteriormente, nomeadamente permitir redos com um emnor número de parâmetros.
+Para o problema de segmentação semântica escolhemos um modelo que aplica uma adaptação muito simples de uma arquitetura u-net:
+    1. Primeiro temos uma bloco de convolutional layers igual ao blocos dos problemas anteriores (duas convolutional layers com Batch Normalization e uma camada final de Max polling) com um kernel de (2,2) e 16 filtros. Este corresponde ao nível um.
+    2. Temos uma camada correspondendo à "base do U" com um bloco de convolutional layers com um kernel de (2,2) e 32 filtros.
+    3. Começamos agora a "subida do U" e temos um bloco de UpSampling. Este bloco tem uma camada de upsampling com size=(2, 2), interpolation="nearest", depois concatena o resultado nessa camada com o resultado da camada do mesmo nível do bloco convolutional, sem o MaxPooling. Como só temos um nível a concatenação deste upsampling é com o resultado do bloco de convolutional layers do nível 1, descrito no ponto 1.
+    4. Finalmente temos a preparação do output com uma última convolutional layer com 1 filtro e um kernel de (2,2) com função de activação sigmoid. A função de sigmoid permite construir a máscara de segmentação através de uma classificação pixel a pixel.
+
+    A função de activação sigmoid foi escolhida para a camada de output porque é a função de ativação standard neste tipo de problemas.
+    Como loss function escolhemos binary_crossentropy dado que estamos a classificar cada pixel da imagem individualmente, tornando-se a loss function mais apropriada.
+    Nas camadas escondidas foi utilizada a função de ativação "Relu" pelos mesmos motivos que anteriormente explicados, especialmente para evitar o fenómeno dos vanishing gradients.
+    As skip connections na arquitetura u-net permitem passar às últimas camadas informações adicionais que lhes permitem construir uma melhor máscara, dado que fornece um fluxo adicional das camadas anteriores sem degradação. Estas conecções permitem a rede aprender uma melhor representação.
+
 
 Q5: Discuss and explain how you selected the best model for the semantic segmentation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained. Use the auxiliary functions provided to show the correspondence between your predicted segmentation masks and the masks provided in the test set.
 Q5: Discuta e explique como seleccionou o melhor modelo para o problema de segmentação semântica, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos. Use as funções auxiliares fornecidas para mostrar a correspondência entre as máscaras de segmentação previstas e as máscaras no conjunto de teste.
