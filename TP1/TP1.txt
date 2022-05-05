@@ -37,7 +37,7 @@ O uso da função de activação softmax aplica-se a problemas de classificaçã
 
 Para a loss function escolhemos categorical_crossentropy dado que é uma loss function que se aplica o problemas de classificação multiclasse, que é o que estamos a avaliar: a qual das 10 classes existentes pertence cada exemplo.
 
-Q2: Discuss and explain how you selected the best model for the multiclass classifcation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained.
+Q2: Discuss and explain how you selected the best model for the multiclass classification problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained.
 Q2: Discuta e explique como selecionou o melhor modelo para o problema de classificação multi-classe, mostrando os gráficos relevantes, comparando os diferentes modelos que experimentou e avaliando os resultados obtidos.
 R2:
 Para selecionarmos o melhor modelo fizemos uma série de experiências com diferentes arquiteturas, experimentando modelos com mais e menos convolutional layers, alterando o número de filtros e o tamanho do kernel utilizado, adicionando e removendo layers de Dropout e BatchNormalization e experimentando com diferentes otimizadores.
@@ -80,7 +80,7 @@ Para o problema de segmentação semântica escolhemos um modelo que aplica uma 
     A função de activação sigmoid foi escolhida para a camada de output porque é a função de ativação standard neste tipo de problemas.
     Como loss function escolhemos binary_crossentropy dado que estamos a classificar cada pixel da imagem individualmente, tornando-se a loss function mais apropriada.
     Nas camadas escondidas foi utilizada a função de ativação "Relu" pelos mesmos motivos que anteriormente explicados, especialmente para evitar o fenómeno dos vanishing gradients.
-    As skip connections na arquitetura u-net permitem passar às últimas camadas informações adicionais que lhes permitem construir uma melhor máscara, dado que fornece um fluxo adicional das camadas anteriores sem degradação. Estas conecções permitem a rede aprender uma melhor representação.
+    As skip connections na arquitetura u-net permitem passar às últimas camadas informações adicionais que lhes permitem construir uma melhor máscara, dado que fornece um fluxo adicional das camadas anteriores sem degradação. Estas conexões permitem a rede aprender uma melhor representação.
 
 
 Q5: Discuss and explain how you selected the best model for the semantic segmentation problem, showing the relevant plots, comparing the different models you tried and evaluating the results you obtained. Use the auxiliary functions provided to show the correspondence between your predicted segmentation masks and the masks provided in the test set.
@@ -91,9 +91,15 @@ Experimentamos dois tipos de arquiteturas: Fully Convolutional Network e U-net. 
 Avaliamos a performance dos diversos modelos avaliando a accuracy e a loss no conjunto de validação e selecionando os com melhores valores.x De entre modelos com performances semelhantes escolhemos sempre o modelo mais simples, com o menor número de parâmetros para treinar. Sendo assim acabados com o modelo muito simples descrito anteriormente.
 Nas figuras images/segmentation_best_model_accuracy.png e images/segmentation_best_model_loss.png podemos ver a performance do nosso modelo.
 Nas figuras images/segmentation_test_compare.png e images/segmentation_test_overlay.png podemos ter uma noção mais intuitiva das máscaras criadas pelo nosso modelo, comparativamente às máscaras esperadas e às imagens dadas.
+A accuracy e a loss obtidas pelo nosso modelo neste problema foram:
+Segmentation accuracy: 0.9989907145500183; Segmentation loss: 0.0029769756365567446
 
 
 Q6: (Optional) Discuss the impact on training and overfitting for the two classification problems when using available networks pretrained on ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explain how you used these networks and discuss the effect they had relative to your models.
 Q6: (Opcional) Discuta o impacto no treino e sobreajustamento nos dois problemas de classificação se usar redes pré-treinadas no dataset ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explique como usou estas redes e discuta o efeito que tiveram nos seus modelos.
 R6:
-
+Para esta parte do trabalho decidimo-nos focar no problema de classificação de multi-classe.
+Com isto em mente, construimos uma rede em que incluímos o modelo MobileNetV2 em substituição das Convolutional Layers e completámos a mesma construindo as nossas Dense Layers.
+Pudemos assim tirar as seguintes conclusões:
+    1. Começamos com 3 Dense layers como usamos anteriormente (256,128,64, com dropout como regularização de forma a evitar overfitting) mas obtivemos um modelo em underfitting com uma loss que foi aumentando durante o treino.
+    

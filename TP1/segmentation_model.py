@@ -112,7 +112,7 @@ def train_segmentation_model(X, Y, test_x, test_classes, now):
 
     model.save_weights('pesos/segmentation{}.h5'.format(now))
 
-    # model.load_weights('pesos/segmentation-best_model.h5')
+    # model.load_weights('pesos/segmentation_best_model.h5')
 
     # measure test error
     segmentation_eval = model.evaluate(test_x, test_classes)
