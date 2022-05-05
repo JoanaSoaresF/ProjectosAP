@@ -10,6 +10,8 @@
 from datetime import datetime
 
 import tp1_utils as util
+from TP1.mobile_net_model_multiclass import train_mobile_net_multiclass_model
+from TP1.mobile_net_model_multilabel import train_mobile_net_multilabel_model
 from TP1.multilabel_models import train_multilabel_model
 from TP1.segmentation_model import train_segmentation_model
 from multiclass_models import train_multiclass_model
@@ -17,6 +19,8 @@ from multiclass_models import train_multiclass_model
 PROBLEM_MULTICLASS = 0
 PROBLEM_MULTILABEL = 1
 PROBLEM_SEGMENTATION = 2
+MOBILE_NET_PROBLEM_MULTICLASS = 3
+MOBILE_NET_PROBLEM_MULTILABEL = 4
 
 
 # tensorboard --logdir logs
@@ -62,6 +66,18 @@ def main(problem):
         masks_predictions = train_segmentation_model(train_X, train_masks, test_x, test_masks, now)
         util.compare_masks('images/test_compare{}.png'.format(now), test_masks, masks_predictions)
         util.overlay_masks('images/test_overlay{}.png'.format(now), test_x, masks_predictions)
+    elif problem == MOBILE_NET_PROBLEM_MULTICLASS:
+        # TODO gráficos com e sem dropout multiclass
+        train_mobile_net_multiclass_model(train_X,
+                                          train_classes,
+                                          test_x,
+                                          test_classes, now)
+    elif problem == MOBILE_NET_PROBLEM_MULTILABEL:
+        # TODO gráficos com e sem dropout multilabel
+        train_mobile_net_multilabel_model(train_X,
+                                          train_labels,
+                                          test_x,
+                                          test_labels, now)
 
 
-main(PROBLEM_SEGMENTATION)
+main(MOBILE_NET_PROBLEM_MULTICLASS)

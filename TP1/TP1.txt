@@ -98,8 +98,9 @@ Segmentation accuracy: 0.9989907145500183; Segmentation loss: 0.0029769756365567
 Q6: (Optional) Discuss the impact on training and overfitting for the two classification problems when using available networks pretrained on ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explain how you used these networks and discuss the effect they had relative to your models.
 Q6: (Opcional) Discuta o impacto no treino e sobreajustamento nos dois problemas de classificação se usar redes pré-treinadas no dataset ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explique como usou estas redes e discuta o efeito que tiveram nos seus modelos.
 R6:
+//TODO explicar overfit e underfit; nossas imagens são muito diferentes das usadas no treino levando a problemas de generalização
 Para esta parte do trabalho decidimo-nos focar no problema de classificação de multi-classe.
-Com isto em mente, construimos uma rede em que incluímos o modelo MobileNetV2 em substituição das Convolutional Layers e completámos a mesma construindo as nossas Dense Layers.
+Com isto em mente, construímos uma rede em que incluímos o modelo MobileNetV2 em substituição das Convolutional Layers e completámos a mesma construindo as nossas Dense Layers.
 Pudemos assim tirar as seguintes conclusões:
     1. Começamos com 3 Dense layers como usamos anteriormente (256,128,64, com dropout como regularização de forma a evitar overfitting) mas obtivemos um modelo em underfitting com uma loss que foi aumentando durante o treino.
     
