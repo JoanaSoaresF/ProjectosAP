@@ -27,7 +27,7 @@ def create_mobile_net_model_multilabel(input_shape):
     """
 
     # base model for Mobile Net
-    base_model = MobileNetV2(input_shape=input_shape, classes=10)
+    base_model = MobileNetV2(input_shape=input_shape, include_top=False, classes=10)
     for layer in base_model.layers:
         layer.trainable = False
 

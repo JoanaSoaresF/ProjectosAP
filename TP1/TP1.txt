@@ -98,9 +98,19 @@ Segmentation accuracy: 0.9989907145500183; Segmentation loss: 0.0029769756365567
 Q6: (Optional) Discuss the impact on training and overfitting for the two classification problems when using available networks pretrained on ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explain how you used these networks and discuss the effect they had relative to your models.
 Q6: (Opcional) Discuta o impacto no treino e sobreajustamento nos dois problemas de classificação se usar redes pré-treinadas no dataset ImageNet (e.g. EfficientNetB0, MobileNetV2 or others). Explique como usou estas redes e discuta o efeito que tiveram nos seus modelos.
 R6:
-//TODO explicar overfit e underfit; nossas imagens são muito diferentes das usadas no treino levando a problemas de generalização
-Para esta parte do trabalho decidimo-nos focar no problema de classificação de multi-classe.
-Com isto em mente, construímos uma rede em que incluímos o modelo MobileNetV2 em substituição das Convolutional Layers e completámos a mesma construindo as nossas Dense Layers.
+//TODO Reler e ver se concordas com o overfitting em todas as situações do multi-label
+Para esta parte do trabalho começamos por nos focar no problema de classificação de multi-classe e posteriormente para trabalhamos no problema de classificação multi-label.
+Com isto em mente, construímos uma rede em que incluímos a rede MobileNetV2 em substituição das Convolutional Layers e completámos a mesma construindo as nossas Dense Layers. Utilizamos ainda as mesmas funções de ativação e de loss pelos motivos explicados anteriormente.
 Pudemos assim tirar as seguintes conclusões:
-    1. Começamos com 3 Dense layers como usamos anteriormente (256,128,64, com dropout como regularização de forma a evitar overfitting) mas obtivemos um modelo em underfitting com uma loss que foi aumentando durante o treino.
+    1. Começamos com 3 Dense layers como usamos anteriormente (256,128,64, com dropout como regularização de forma a evitar overfitting) mas obtivemos um modelo em underfitting. (imagens: images/mobileNet_multiclass_dropout_accuracy.png images/mobileNet_multiclass_dropout_loss.png)
+    2. Após alterar o número de camadas e o tamanho das mesmas decidimos retirar o dropout onde obtivemos resultados em overfitting. (imagens: images/mobileNet_multiclass_accuracy.png images/mobileNet_multiclass_loss.png)
+    3. Por último e a fim de resolver este problema treinamos o modelo com outras formas de regularização, L1, L2 e L1L2 mas obtivemos resultados ainda piores pelo que nos vimos incapazes de encontrar algum equilibrio que tivesse resultados aceitáveis.
+
+Com base nestas observações decidimos que esta rede, MobileNetV2, foi treinada com o objetivo de identificar padrões em imagens muito diferentes das nossas, e assim, mostrou-se incapaz de se adaptar ao contexto do nosso problema.
+
+No problema de classificação multi-label tomamos uma abordagem similar.
+Com uma rede semelhante à anterior obtivemos resultados overfitting obtivemos quer quando não utilizamos dropout, por onde começamos, quer quando o utilizamos.
+(imagens: images/mobileNet_multilabel_dropout_Accuracy.png images/mobileNet_multilabel_dropout_loss.png images/mobileNet_multilabel_Accuracy.png images/mobileNet_multilabel_Loss.png)
+Pelo que este problema, à semelhança do anterior apresenta resultados inferiores aos "originais nossos". No entanto, com uma Accuracy de quase 88%, e uma Loss de 0.33 (aquando parado antes de entrar em overfitting, 20 epochs) este modelo é bastante utilizável dependendo do rigor necessário para a aplicação prática dos resultados.
+
     
