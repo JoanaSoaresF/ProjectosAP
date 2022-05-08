@@ -28,7 +28,7 @@ def create_mobile_net_model_multiclass(input_shape):
     """
 
     # base model for Mobile Net
-    base_model = MobileNetV2(input_shape=input_shape, classes=10)
+    base_model = MobileNetV2(input_shape=input_shape, include_top=False, classes=10)
     base_model.trainable = False
 
     # New Model
@@ -37,10 +37,10 @@ def create_mobile_net_model_multiclass(input_shape):
     layer = GlobalAveragePooling2D()(layer)
 
     # Dense layers for classification
-    layer = dense_block(layer, 512, dropout=False)
-    layer = dense_block(layer, 256, dropout=False)
-    layer = dense_block(layer, 128, dropout=False)
-    layer = dense_block(layer, 64, dropout=False)
+    layer = dense_block(layer, 512, dropout=True)
+    layer = dense_block(layer, 256, dropout=True)
+    layer = dense_block(layer, 128, dropout=True)
+    layer = dense_block(layer, 64, dropout=True)
 
     # output
     layer = Dense(10)(layer)
@@ -82,6 +82,8 @@ def train_mobile_net_multiclass_model(X, Y, test_x, test_classes, now):
               callbacks=[tb_callback])
 
     model.save_weights('pesos/mobile_net_multiclass_model{}.h5'.format(now))
+
+    # model.load_weights('pesos/mobile_net_multiclass_model_2022-05-08_08h31min.h5')
 
     # measure test error
     eval = model.evaluate(test_x, test_classes)

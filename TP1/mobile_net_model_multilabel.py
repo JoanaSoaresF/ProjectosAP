@@ -37,10 +37,10 @@ def create_mobile_net_model_multilabel(input_shape):
     layer = GlobalAveragePooling2D()(layer)
 
     # Dense layers for classification
-    layer = dense_block(layer, 512, dropout=False)
-    layer = dense_block(layer, 256, dropout=False)
-    layer = dense_block(layer, 128, dropout=False)
-    layer = dense_block(layer, 64, dropout=False)
+    layer = dense_block(layer, 512, dropout=True)
+    layer = dense_block(layer, 256, dropout=True)
+    layer = dense_block(layer, 128, dropout=True)
+    layer = dense_block(layer, 64, dropout=True)
 
     # output
     layer = Dense(10)(layer)

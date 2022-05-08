@@ -67,13 +67,11 @@ def main(problem):
         util.compare_masks('images/test_compare{}.png'.format(now), test_masks, masks_predictions)
         util.overlay_masks('images/test_overlay{}.png'.format(now), test_x, masks_predictions)
     elif problem == MOBILE_NET_PROBLEM_MULTICLASS:
-        # TODO gráficos com e sem dropout multiclass
         train_mobile_net_multiclass_model(train_X,
                                           train_classes,
                                           test_x,
                                           test_classes, now)
     elif problem == MOBILE_NET_PROBLEM_MULTILABEL:
-        # TODO gráficos com e sem dropout multilabel
         train_mobile_net_multilabel_model(train_X,
                                           train_labels,
                                           test_x,
