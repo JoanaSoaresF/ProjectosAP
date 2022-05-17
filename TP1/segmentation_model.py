@@ -8,8 +8,9 @@
 from keras import Input, Model
 from keras.callbacks import TensorBoard
 from keras.layers import Conv2D, Activation, UpSampling2D, Concatenate, BatchNormalization, MaxPooling2D
+from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.optimizers import Adam
+# from tensorflow.keras.optimizers import Adam
 
 root_logdir = "logs"
 

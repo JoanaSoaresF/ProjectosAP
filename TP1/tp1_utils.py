@@ -9,8 +9,9 @@ Auxiliary functions
 
 import numpy as np
 import pandas as pd
+from keras.utils import to_categorical
 from skimage.io import imsave
-from tensorflow.keras.utils import to_categorical
+# from tensorflow.keras.utils import to_categorical
 
 
 def images_to_pic(f_name, images, width=20):
