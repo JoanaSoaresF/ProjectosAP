@@ -20,6 +20,7 @@ PERGUNTAS/QUESTIONS:
 Q1: Explain and justify the architecture of your agent, describing the network, input and output, and what experiments you did to choose this particular architecture.
 Q1; Explique e justifique a arquitectura do seu agente, descrevendo a rede, os valores de entrada e saída e que experiências fez para escolher esta rede em particular.
 R1:
+Como o estado do nosso agente consiste numa imagem do board de jogo, o nosso agente tem que conseguir identificar e extrair as features certas para representar o treino. Sendo assim usamos uma CNN para implementar o nosso agente. A ultima camada do agente é uma dense layer com 3 neurónios, correpondendo às três ações possíveis.
 
 
 Q2: Describe the scenario for which you tried to optimize your agent, justifying your choice and describing the experiments you did to select this scenario.

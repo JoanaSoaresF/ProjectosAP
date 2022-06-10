@@ -30,4 +30,4 @@ def snake_demo(actions):
         plot_board(f'{frame + 1}.png', board, action_name[action])
 
 
-snake_demo([0, 1, 0, -1])
+# snake_demo([0, 1, 0, -1])

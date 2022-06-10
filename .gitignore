@@ -136,3 +136,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/TP2/weights/
+/TP2/plots/
+/TP2/train/
+/TP2/games/
+/TP2/TP2.ipynb
