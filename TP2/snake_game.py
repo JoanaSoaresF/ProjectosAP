@@ -163,7 +163,7 @@ class SnakeGame:
             return board
 
 
-# just run this if this file is the main
+# just run this if this file is the training_episodes
 if __name__ == '__main__':
     game = SnakeGame(20, 20)
     game.print_state()

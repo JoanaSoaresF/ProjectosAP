@@ -9,22 +9,23 @@ from collections import deque
 from datetime import datetime
 
 import numpy as np
-from tensorflow.keras.layers import Input, Flatten, Dense, Conv2D, MaxPooling2D
-from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import Huber
 import tensorflow as tf
+from tensorflow.keras.layers import Input, Flatten, Dense
+from tensorflow.keras.losses import Huber
+from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
+from tensorflow.keras.optimizers import Adam
 
-from Utils import convolution_stack_layer, dense_block, plot_statistics, create_folders
+from Utils import plot_statistics, create_folders
 from game_demo import plot_board
+from network_utils import convolution_stack_layer, dense_block
 from snake_game import SnakeGame
 
 # PATHS
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("_%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'cnn_agent_game'
+GAME_NAME = 'cnn_agent_game_grass_on'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
@@ -34,31 +35,38 @@ PLOT_TRAIN = False
 
 # Parameters
 MAX_EPSILON = 1
-MIN_EPSILON = 0.01
-DECAY = 0.01
+MIN_EPSILON = 0.1
+DECAY = 0.025
 MIN_REPLAY_SIZE = 1028
-TRAIN_EPISODES = 400
-DISCOUNT_FACTOR = 0.4
+TRAIN_EPISODES = 1000
+DISCOUNT_FACTOR = 0.8
 BATCH_SIZE = 512
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.003
 
 # GAME PARAMETERS
 BOARD_DIM = 14
 BORDER = 9
-FOOD = 5
-GRASS_GROW = 0
-MAX_GRASS = 0
+FOOD = 7
+GRASS_GROW = 0.001
+MAX_GRASS = 0.07
+
+VERSION_INFORMATION = f'\n*******************************************************************************************\n' \
+                      f'Running on: {now}\n' \
+                      f'Epsilon: max:{MAX_EPSILON} decay:{DECAY}\n' \
+                      f'Episodes: {TRAIN_EPISODES}; Replay: {MIN_REPLAY_SIZE}; Batch size: {BATCH_SIZE}; Learning rate:{LEARNING_RATE}\n' \
+                      f'Discount factor: {DISCOUNT_FACTOR}\n' \
+                      f'Game: {BOARD_DIM}x{BOARD_DIM} with {BORDER} border; food: {FOOD}; grass: {MAX_GRASS} with grow {GRASS_GROW}\n'
 
 
-def agent(state_shape, action_shape):
+def agent(state_shape):
     """The agent maps states to actions, computing the  q-function value"""
 
     inputs = Input(shape=state_shape, name='inputs')
 
     # convolutional layers stacked
-    convolutional_layer = convolution_stack_layer(inputs, 64, (2, 2))
+    convolutional_layer = convolution_stack_layer(inputs, 16, (2, 2))
     convolutional_layer = convolution_stack_layer(convolutional_layer, 32, (2, 2))
-    convolutional_layer = convolution_stack_layer(convolutional_layer, 16, (2, 2))
+    convolutional_layer = convolution_stack_layer(convolutional_layer, 64, (2, 2))
 
     # Flatten before dense layers
     layer = Flatten()(convolutional_layer)
@@ -79,7 +87,7 @@ def agent(state_shape, action_shape):
     return model
 
 
-def train(replay_memory, model, target_model):
+def train_agent(replay_memory, model, target_model):
     mini_batch = random.sample(replay_memory, BATCH_SIZE)
 
     current_states = np.array([action[0] for action in mini_batch])
@@ -101,38 +109,10 @@ def train(replay_memory, model, target_model):
         X.append(observation)
         Y.append(current_qs)
 
-    model.fit(np.array(X), np.array(Y), batch_size=BATCH_SIZE, verbose=1, shuffle=True)
+    model.fit(np.array(X), np.array(Y), batch_size=int(BATCH_SIZE/4), verbose=1, shuffle=True)
 
 
-def play_trained_model(action_space):
-    path = f'{WEIGHTS_PATH}{GAME_NAME}{now}'
-    model = load_model(path)
-    done = False
-    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD,
-                           border=BORDER, grass_growth=GRASS_GROW,
-                           max_grass=MAX_GRASS)
-    step = 1
-    board = snake_game.board_state()
-    total_reward = 0
-
-    game_folder = f"{GAMES_PATH}{GAME_NAME}{now}/"
-    create_folders(game_folder)
-
-    while not done:
-        reshaped = np.reshape(board, (-1, 32, 32, 3))
-        predicted = model.predict(reshaped).flatten()
-        action = action_space[np.argmax(predicted)]
-        board, reward, done, _ = snake_game.step(action)
-        plot_board(f"{game_folder}{step}.png", board, f"step = {step}")
-        total_reward += reward
-        step += 1
-        if step == 1000:
-            break
-    print("****** Game ended ******")
-    print(f"Steps took = {step}\nTotal Reward = {total_reward}")
-
-
-def main():
+def training_episodes():
     action_space = [-1, 0, 1]
     epsilon = MAX_EPSILON  # Epsilon-greedy algorithm in initialized at 1 meaning every step is random at the start
     snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD,
@@ -140,9 +120,9 @@ def main():
                            max_grass=MAX_GRASS)
     # 1. Initialize the Target and Main models
     # Main Model (updated every 4 steps)
-    model = agent((32, 32, 3), 3)
+    model = agent((32, 32, 3))
     # Target Model (updated every 100 steps)
-    target_model = agent((32, 32, 3), 3)
+    target_model = agent((32, 32, 3))
     target_model.set_weights(model.get_weights())
 
     replay_memory = deque(maxlen=100_000)
@@ -160,8 +140,10 @@ def main():
 
         total_training_rewards = 0
         board, reward, done, score_dict = snake_game.reset()
+
         if PLOT_TRAIN:
             plot_board(f'{episode_path}{0}.png', board, f"Start")
+
         done = False
         step = 0
         decay_epsilon = False
@@ -203,7 +185,7 @@ def main():
                 # condition is met, the model is trained every four steps
 
                 decay_epsilon = True
-                train(replay_memory, model, target_model)
+                train_agent(replay_memory, model, target_model)
 
             if done:
                 # print(exploit_actions)
@@ -223,16 +205,53 @@ def main():
         reward_statistics.append(total_training_rewards)
 
     tf.keras.models.save_model(model, f'{WEIGHTS_PATH}{GAME_NAME}{now}')
-    # model.save(f'{WEIGHTS_PATH}{GAME_NAME}{now}.h5')
+
     path = f'{PLOTS_PATH}{GAME_NAME}{now}'
     create_folders(path)
     plot_statistics(steps_statistics, "Steps", f'{path}/steps.png')
     plot_statistics(reward_statistics, "Rewards", f'{path}/rewards.png')
 
 
+def play_trained_model(action_space):
+    path = f'{WEIGHTS_PATH}{GAME_NAME}{now}'
+    model = load_model(path)
+    done = False
+    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD,
+                           border=BORDER, grass_growth=0,
+                           max_grass=0)
+    step = 1
+    board = snake_game.board_state()
+    total_reward = 0
+
+    game_folder = f"{GAMES_PATH}{GAME_NAME}{now}/"
+    create_folders(game_folder)
+
+    while not done:
+        reshaped = np.reshape(board, (-1, 32, 32, 3))
+        predicted = model.predict(reshaped).flatten()
+        action = action_space[np.argmax(predicted)]
+        board, reward, done, _ = snake_game.step(action)
+        plot_board(f"{game_folder}{step}.png", board, f"step = {step}")
+        total_reward += reward
+        step += 1
+        if step == 500:
+            break
+    print("****** Game ended ******")
+    game_result = f"Steps took = {step}\nTotal Reward = {total_reward}"
+    print(game_result)
+    return game_result
+
+
 if __name__ == '__main__':
-    # now = '_2022-06-10_21h14min'
-    now = datetime.utcnow().strftime("_%Y-%m-%d_%Hh%Mmin")
-    main()
+    print(VERSION_INFORMATION)
+    f = open("runs_info", "a")
+    f.write(VERSION_INFORMATION)
+
+    training_episodes()
+
     print("******* Playing game *********")
-    play_trained_model([-1, 0, 1])
+    game_result = play_trained_model([-1, 0, 1])
+
+    f.write(f"Playing game result:\n{game_result}\n")
+    f.write(f'*******************************************************************************************\n')
+    f.close()

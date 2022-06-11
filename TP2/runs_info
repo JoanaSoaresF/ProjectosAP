@@ -1,0 +1,93 @@
+*******************************************************************************************
+Running on: _2022-06-11_08h10min
+Epsilon: max:1 decay:0.05
+Episodes: 500; Replay: 1028; Batch size: 256
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.05 with grow 0.001
+
+Steps took = 15
+Total Reward = 2.6499999999999986
+*******************************************************************************************
+*******************************************************************************************
+Running on: _2022-06-11_12h42min
+Epsilon: max:1 decay:0.05
+Episodes: 500; Replay: 1028; Batch size: 512
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.01 with grow 0.001
+Playing game result:
+Steps took = 500
+Total Reward = 9.965999999999903
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_13h45min
+Epsilon: max:1 decay:0.05
+Episodes: 500; Replay: 1028; Batch size: 512
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.05 with grow 0.0001
+Playing game result:
+Steps took = 39
+Total Reward = 5.705199999999995
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_13h45min -replay
+Epsilon: max:1 decay:0.05
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.05 with grow 0.0001
+Playing game result:
+Steps took = 54
+Total Reward = 2.065199999999996
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_13h45min - replay
+Epsilon: max:1 decay:0.05
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.05 with grow 0.0001
+Playing game result:
+Steps took = 38
+Total Reward = 0.4088000000000003
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_14h34min
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0.05 with grow 0.001
+Playing game result:
+Steps took = 123
+Total Reward = 8.604000000000003
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_16h17min
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.07 with grow 0.001
+Playing game result:
+Steps took = 58
+Total Reward = 6.688000000000006
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-11_17h31min
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.07 with grow 0.001
+
+*******************************************************************************************
+Running on: _2022-06-11_17h33min
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.07 with grow 0.001
+Playing game result:
+Steps took = 9
+Total Reward = -1.0
+*******************************************************************************************
