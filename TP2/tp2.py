@@ -17,7 +17,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.initializers.initializers_v2 import HeUniform
 
-from TP2.policy import policy
+from policy import policy
 from Utils import plot_statistics, create_folders
 from game_demo import plot_board
 from network_utils import convolution_stack_layer, dense_block
@@ -33,7 +33,7 @@ TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
 
 # PLOT OPTION
-PLOT_TRAIN = False
+PLOT_TRAIN = True
 
 # Parameters
 TRAIN_PERIODICITY = 10
