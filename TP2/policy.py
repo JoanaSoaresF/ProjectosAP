@@ -38,7 +38,7 @@ def policy1(apple, head, direction):
         elif direction == E:
             action = TURN_LEFT
         elif direction == S: #pode bater na parede
-            action = FORWARD
+            action = TURN_RIGHT
         else: # W
             action = TURN_RIGHT
 
@@ -58,10 +58,9 @@ def policy1(apple, head, direction):
         elif direction == E:
             action = TURN_LEFT  #pode bater na parede
         elif direction == S:
-            action = FORWARD
-        else: # W
             action = TURN_RIGHT
-
+        else: # W
+            action = FORWARD
 
     return action
 
