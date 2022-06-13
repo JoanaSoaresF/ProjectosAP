@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6b289b4-a55b-43fc-b11b-2867c5f3fdd8" name="Changes" comment="Question 6, images 8/8" />
+    <list default="true" id="e0bbf04d-8afe-4ace-81fe-eed235701a00" name="Changes" comment="Assignment 2 - policy in training">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TP2/tp2.py" beforeDir="false" afterPath="$PROJECT_DIR$/TP2/tp2.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,10 +16,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/TP1/multiclass_models.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP1/tp1.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP1/tp1_utils.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP2/TP2.txt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP2/Utils.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP2/game_demo.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP2/snake_game.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TP2/tp2.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28qbX9uwEf1RbM2GoppVkIDrpFw" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -23,7 +40,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Volumes/GoogleDrive/O meu disco/_Faculdade/4ºAno/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP1/images"
+    "last_opened_file_path": "/Volumes/GoogleDrive/O meu disco/_Faculdade/4ºAno/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP1/images",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -66,7 +84,28 @@
       <option name="project" value="LOCAL" />
       <updated>1651966288384</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Assignment 2 - policy in trainning">
+      <created>1655120528922</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1655120528922</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Assignment 2 - policy in training">
+      <created>1655120764902</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1655120764902</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Assignment 2 - policy in training">
+      <created>1655120885361</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1655120885361</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -87,6 +126,13 @@
     <MESSAGE value="Question 6, needs review" />
     <MESSAGE value="Question 6, images 2/8" />
     <MESSAGE value="Question 6, images 8/8" />
-    <option name="LAST_COMMIT_MESSAGE" value="Question 6, images 8/8" />
+    <MESSAGE value="Assignment 2 - policy in trainning" />
+    <MESSAGE value="Assignment 2 - policy in training" />
+    <option name="LAST_COMMIT_MESSAGE" value="Assignment 2 - policy in training" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ProjectosAP$tp2.coverage" NAME="tp2 Coverage Results" MODIFIED="1654885690826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TP2" />
+    <SUITE FILE_PATH="coverage/ProjectosAP$multiclass_models.coverage" NAME="multiclass_models Coverage Results" MODIFIED="1650217844529" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TP1" />
+    <SUITE FILE_PATH="coverage/ProjectosAP$tp1.coverage" NAME="tp1 Coverage Results" MODIFIED="1654861817523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/TP1" />
   </component>
 </project>

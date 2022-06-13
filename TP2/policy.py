@@ -9,7 +9,7 @@ N, E, S, W = 0, 1, 2, 3
 
 
 def policy(score, apple, head, tail, direction):
-    chosenApple = nearestApple(apple)
+    chosenApple = nearestApple(apple, head)
     return policy1(chosenApple, head, direction)
 
 
