@@ -161,7 +161,7 @@ def training_episodes():
 
             random_number = np.random.rand()
             # 2. Explore using the Epsilon Greedy Exploration Strategy
-            if len(replay_memory) >= MIN_REPLAY_SIZE:
+            if len(replay_memory) <= MIN_REPLAY_SIZE:
                 tag = "Policy"
                 score, apple, head, tail, direction = snake_game.get_state()
                 action = policy(score, apple, head, tail, direction)
