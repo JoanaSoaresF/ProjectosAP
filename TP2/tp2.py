@@ -203,7 +203,7 @@ def training_episodes(replay_memory):
             if done:
                 # print(exploit_actions)
                 print('\tTotal training rewards: {} after n steps = {}'.format(
-                        total_training_rewards, step))
+                    total_training_rewards, step))
 
                 if steps_to_update_target_model >= UPDATE_MODEL and len(replay_memory) >= MIN_REPLAY_SIZE:
                     print('\tCopying main network weights to the target network weights')
@@ -229,7 +229,7 @@ def play_trained_model(action_space, model_path, plot_path):
     print(plot_path)
     model = load_model(model_path)
     done = False
-    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD/2,
+    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD / 2,
                            border=BORDER, grass_growth=0,
                            max_grass=0)
     step = 1
@@ -284,7 +284,7 @@ if __name__ == '__main__':
         path_plot = f'{GAMES_PATH}{now}{GAME_NAME}'
 
         print("******* Playing game *********")
-        game_result = play_trained_model([-1, 0, 1], path, path)
+        game_result = play_trained_model([-1, 0, 1], path, path_plot)
 
         game_string = f"Playing game result:\n{game_result}\n"
         end = f'*******************************************************************************************\n'

@@ -21,21 +21,19 @@ Q1: Explain and justify the architecture of your agent, describing the network, 
 Q1; Explique e justifique a arquitectura do seu agente, descrevendo a rede, os valores de entrada e saída e que experiências fez para escolher esta rede em particular.
 R1:
 Como o estado do nosso agente consiste numa imagem do board de jogo, o nosso agente tem que conseguir identificar e extrair as features certas para representar o board. Sendo assim usamos uma CNN
-para implementar o nosso agente, com três camada de convulsão e MaxPolling seguidas de três dense layers.
+para implementar o nosso agente, com duas camada de convulsão e MaxPolling seguidas de três dense layers.
 A ultima camada do agente é uma dense layer com 3 neurónios, correpondendo às três ações possíveis. Esta útlima camada tem ativação linear dado que se trata de um problema de regressão: estamos a
 tentar aproximas a Q-function para determinar a melhor ação. Assim, a parte de convulsão destina-se a extrair as melhores features do input para serem utilizadas no treino e a parte de dense layers
 destina-se a aproximar a Q-function.
 Experimentamos várias combinações destas camadas mas menos camadas dificultavam a aproximação da Q-function, sendo que não obtivemos bons resultados. Sendo assim temos três convolution blocks (que são
-duas Convolutional layers seguidas de MaxPooling) com 64, 32 e 16 filtros.
-Os valores obtidos por estas camadas passam depois pela funcão de flatten antes de seguirem para as dense layers, três camadas com 128, 64 e 32 neurónios. Estas camadas têm função de ativação "relu" e
+duas Convolutional layers seguidas de MaxPooling) com 16 e 32 filtros.
+Os valores obtidos por estas camadas passam depois pela funcão de flatten antes de seguirem para as dense layers, quatro camadas com 256, 128, 64 e 32 neurónios. Estas camadas têm função de ativação "relu" e
 os seus pesos são inicializados com o HeUniform initializer.
 
-Por fim, o output corresponde a uma camada composta por 3 neurónios com uma função de ativação linear, devido ao problema ser identificado como um de regressão linear, escolhemos a função Huber loss
-como a nossa função de loss e o Adam como otimizador.
+Por fim, o output corresponde a uma camada composta por 3 neurónios escolhemos a função Huber loss como a nossa função de loss, que é semelhante ao MSE mas não responde tão fortemente a outliers, e o Adam como otimizador.
 
 Executámos variadas experiências, mas esta rede foi a que decidimos ter uma melhor relação custo benefício para o nosso agente.
-Experimentamos ainda ter batchnormalizaton entre as camadas, porém os resultados que obtivemos não foram os melhores. Possivelmente porque as imagens de input tem pouca diferença entre elas e talvez a batch
-normalization esconda essas diferenças de modo a que o treino seja mais difícil. //NOTE
+Experimentamos ainda ter batchnormalizaton entre as camadas, porém os resultados que obtivemos não foram os melhores. Possivelmente porque as imagens de input tem pouca diferença entre elas e talvez a batch normalization esconda essas diferenças de modo a que o treino seja mais difícil.
 
 
 Q2: Describe the scenario for which you tried to optimize your agent, justifying your choice and describing the experiments you did to select this scenario.
@@ -46,12 +44,13 @@ Para este problema tentámos otimizar o agente de modo a que este
     (2) não morra por se tentar comer a si próprio;
     (3) escolha comer maçãs porque lhe trás um maior benefício.
 
-Para cumprir com os nossos objetivos começámos por treinar a rede sem nenhuma política para ver o seu resultado. Como era de esperar não foi o melhor, mas insistimos modificando o nosso código até ao momento.
-Adicionando e removendo camadas, alterando políticas de recompensa, experimentaando com e sem relva e decidimos também aumentar o número de macãs de forma a aumentar a possíbilidade de um movimento aleatório
-encontrar alguma.
-Quando encontrámos uma execussão que a cobra girava em torno de si própria introduzimos a primeira política. Nesta primeira política virava-mos a cabeça da cobra em direção á maçã mais antiga de forma a encaminhar
-a cobra na direção certa mas como tal maçã poderia estar em qualquer lado do mapa, muitas das vezes viravamos a cobra contra si própria. A fim de reduzir este problema e para diminuir os paços necessários até
-à comida do fruto passámos a considerar apenas a maçã mais próxima (esta raramente se encontra para trás da cobra visto que a mesma veio de lá, do local mais perto da mesma).
+Para cumprir com os nossos objetivos começámos por treinar a rede sem nenhuma política para ver o seu resultado. Como era de esperar não foi o melhor.
+Em primeiras tentativas, não implementando nenhuma política e sem usar a relva verificamos que o resultador era que a cobra aprendia rapidamente a não morrer, mas aprendia a andar em círculos, não morrendo mas também não apanhando nenhuma maças, como podemos ver no exemplo ./exemplos/ciclo.gif
+Depois incluimos a relva durante o treino, para incentivar a cobra a não fazer ciclos. Porém verificamos que cobra continuava a não tentar apanhar as maças.
+
+Para aumentar o número de exemplos disponíveis para treino em que a cobra apanhava a maça implmentamos uma política nesse sentido, e aumentamos o número de maças de modo a facilitar que a cobra as encontrasse aleatóriamente.
+Numa primeira política virava-mos a cabeça da cobra em direção á maçã mais antiga de forma a encaminhar a cobra na direção certa mas como tal maçã poderia estar em qualquer lado do mapa, muitas das vezes viravamos a cobra contra si própria. A fim de reduzir este problema e para diminuir os paços necessários até à comida do fruto passámos a considerar apenas a maçã mais próxima (esta raramente se encontra para trás da cobra visto que a mesma veio de lá, do local mais perto da mesma).
+Com a implmentação desta política passamos a observar mais casos de sucesso da cobra a perseguir a maça.
 
 
 Q3: Explain how you generate the experiences for training your agent. Do not forget to explain the details like the balance between exploitation and exploration, how experiences are selected, what information you store in each experience, how large is the pool of experiences and how frequently are new experiences generated. Justify your choices.
@@ -64,9 +63,6 @@ Para garantir que a memória continua com exemplos relevantes da cobra a comer m
 
 Aquando de selecionar as experiências, nós escolhemos guardar todas visto que o nosso conjunto gerado nos pareceu diversificado o suficiente. Para cada experiência guardamos o estado atual do tabuleiro, a ação tomada, a reward associada a essa ação, o novo estado do tabuleiro e o estado do jogo, se acabou ou não.
 Guardamos numa replay memory as últimas 50000 experiências e temos um batch size de 1024 sendo necessário pelo menos 2048 exemplos iniciais (preenchidos seguindo a política implementada).
-
-
-
 
 
 Q4: Explain how you trained your agent: the algorithm used, the discount factor (gamma), the schedule for generating new experiences and training the agent and other techniques. Justify your choices and explain what experiments you did and which alternatives you tried.
