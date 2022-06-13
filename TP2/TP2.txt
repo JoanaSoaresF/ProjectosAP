@@ -20,15 +20,11 @@ PERGUNTAS/QUESTIONS:
 Q1: Explain and justify the architecture of your agent, describing the network, input and output, and what experiments you did to choose this particular architecture.
 Q1; Explique e justifique a arquitectura do seu agente, descrevendo a rede, os valores de entrada e saída e que experiências fez para escolher esta rede em particular.
 R1:
-Como o estado do nosso agente consiste numa imagem do board de jogo, o nosso agente tem que conseguir identificar e extrair as features certas para representar o board. Sendo assim usamos uma CNN
-para implementar o nosso agente, com duas camada de convulsão e MaxPolling seguidas de três dense layers.
-A ultima camada do agente é uma dense layer com 3 neurónios, correpondendo às três ações possíveis. Esta útlima camada tem ativação linear dado que se trata de um problema de regressão: estamos a
-tentar aproximas a Q-function para determinar a melhor ação. Assim, a parte de convulsão destina-se a extrair as melhores features do input para serem utilizadas no treino e a parte de dense layers
+Como o estado do nosso agente consiste numa imagem do board de jogo, o nosso agente tem que conseguir identificar e extrair as features certas para representar o board. Sendo assim usamos uma CNN para implementar o nosso agente, com duas camadas de convulsão e MaxPolling seguidas de três dense layers.
+A última camada do agente é uma dense layer com 3 neurónios, correpondendo às três ações possíveis. Esta útlima camada tem ativação linear dado que se trata de um problema de regressão: estamos a tentar aproximar a Q-function para determinar a melhor ação. Assim, a parte de convulsão destina-se a extrair as melhores features do input para serem utilizadas no treino e a parte de dense layers
 destina-se a aproximar a Q-function.
-Experimentamos várias combinações destas camadas mas menos camadas dificultavam a aproximação da Q-function, sendo que não obtivemos bons resultados. Sendo assim temos três convolution blocks (que são
-duas Convolutional layers seguidas de MaxPooling) com 16 e 32 filtros.
-Os valores obtidos por estas camadas passam depois pela funcão de flatten antes de seguirem para as dense layers, quatro camadas com 256, 128, 64 e 32 neurónios. Estas camadas têm função de ativação "relu" e
-os seus pesos são inicializados com o HeUniform initializer.
+Experimentamos várias combinações destas camadas, mas menos camadas dificultavam a aproximação da Q-function, sendo que não obtivemos bons resultados. Sendo assim temos três convolution blocks (que são duas Convolutional layers seguidas de MaxPooling) com 16 e 32 filtros.
+Os valores obtidos por estas camadas passam depois pela funcão de flatten antes de seguirem para as dense layers, quatro camadas com 256, 128, 64 e 32 neurónios. Estas camadas têm função de ativação "relu" e os seus pesos são inicializados com o HeUniform initializer.
 
 Por fim, o output corresponde a uma camada composta por 3 neurónios escolhemos a função Huber loss como a nossa função de loss, que é semelhante ao MSE mas não responde tão fortemente a outliers, e o Adam como otimizador.
 
@@ -56,9 +52,8 @@ Com a implmentação desta política passamos a observar mais casos de sucesso d
 Q3: Explain how you generate the experiences for training your agent. Do not forget to explain the details like the balance between exploitation and exploration, how experiences are selected, what information you store in each experience, how large is the pool of experiences and how frequently are new experiences generated. Justify your choices.
 Q3: Explique como gerou as experiências para treinar seu agente. Não se esqueça de explicar os detalhes como o equilíbrio entre exploração aleatória e guiada (exploration e exploitation), como as experiências são selecionadas, que informação guarda em cada experiência, quão grande é o conjunto de experiências e com que frequência novas experiências são geradas. Justifique estas escolhas.
 R3:
-Para treinar o nosso agente começamos por gerar 1028 experiencias. Iniciamos as mesmas apenas com valores de uma política por forma a ter bastantes exemplos de comer maçãs, mostrar mortes do jogador quando este vai para a maçã
-ignorando os obstáculos no caminho (o próprio corpo). Depois de gerar os exemplos iniciais começamos o treino propriamente dito.
-Para a exploração temos uma probabilidade decrescente durante o treino, variando de 100% a 5%. Se não for uma ação de exploração iremos por em prática o conhecimento adquirido pelo nosso agente usando as suas previsões de qual a melhor ação.
+Para treinar o nosso agente começamos por gerar 1028 experiencias. Iniciamos as mesmas apenas com valores de uma política por forma a ter bastantes exemplos de comer maçãs, mostrar mortes do jogador quando este vai para a maçã ignorando os obstáculos no caminho (o próprio corpo). Após gerar os exemplos iniciais começamos o treino propriamente dito.
+Para a exploração temos uma probabilidade decrescente durante o treino, variando de 100% a 5%. Se não for uma ação de exploração iremos pôr em prática o conhecimento adquirido pelo nosso agente usando as suas previsões de qual a melhor ação.
 Para garantir que a memória continua com exemplos relevantes da cobra a comer maças, a cada 10 episódios é feito um jogo udando completamente a heurística.
 
 Aquando de selecionar as experiências, nós escolhemos guardar todas visto que o nosso conjunto gerado nos pareceu diversificado o suficiente. Para cada experiência guardamos o estado atual do tabuleiro, a ação tomada, a reward associada a essa ação, o novo estado do tabuleiro e o estado do jogo, se acabou ou não.
@@ -77,5 +72,7 @@ Q5: Discuta este problema e a sua solução, descrevendo o desempenho do agente 
 R5:
 Entendemos que a nossa solução não teve os melhores resultados, embora durante o treino os nossos resultados fossem aceitáveis e até considerados bons, quando avaliámos a performance da rede num jogo ela deixava bastante a desejar. Enquanto que em treino o número de passos era de média em torno de 30 (verificando-se muitos acima de 100), na execussão com a rede treinada poucos foram os jogos em que o agente realizou 20 passos. Em relação à pontuação, embora em treino fosse habitual valores superiores a 20 (chegando em muitos episódios, não corridos pela política, a 50), quando realizamos a avaliação da rede raros foram os jogos em que saíssemos de 0.
 Assim, de início conseguimos encontrar redes que não morriam, no entanto, estas também não procuravam maçãs ou melhores rewards, a fim de resolver este problema procurámos a implementação de uma política que procurasse aumentar a pontuação, o que correu bem no treino mas teve resultados menos significativos durante a execussão, dificultando também a aprendizagem de sobrevivência.
+Com mais tempo também gostariamos de treinar com o tabuleiro completo, em que a área de foco referida anteriormente traria maiores vantagens, e treinar durante mais tempo, para a agente ter uma maior variedade de exemplos para aprendizagem.
 
 Como conclusão achamos que deveríamos implementar algum tipo de filtro que facilite o foco do agente em elementos proximos de si, sejam estes elementos positivos como maçãs ou relva, sejam eles o próprio corpo ou uma parede, elementos a evitar. Talvez desta forma, e com este foco o agente fosse mais facilmente treinado e não ficasse tão "confuso" com toda a informação que recebe.
+Antes de implementarmos a política verificavamos no treino uma melhor aprendizagem da cobra para o objetivo de não morrer, o que se pode ver na evolução crescente do número de passos na imagem ./examples/steps.png . Também mostrou resultados algo favorávos por haver uma evolução positiva das recompensas conseguidas (isto porque o número de maças durante o treino era elecado, e era fácil encontrar maças aleatóriamente), tal pode ser observado na imagem ./examples/rewards.png

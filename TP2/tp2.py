@@ -225,8 +225,6 @@ def training_episodes(replay_memory):
 
 
 def play_trained_model(action_space, model_path, plot_path):
-    print(model_path)
-    print(plot_path)
     model = load_model(model_path)
     done = False
     snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD / 2,

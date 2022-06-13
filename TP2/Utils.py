@@ -12,16 +12,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def create_gif(images_frames, gif_name, time=0.2):
-    filenames = os.listdir(images_frames)
-    filenames.sort()
-    print(filenames)
-    with imageio.get_writer(gif_name, mode='I', duration=time) as writer:
-        for filename in filenames:
-            image = imageio.imread(f"{gif_name}/{gif_name}")
-            writer.append_data(image)
-
-
 def plot_statistics(data, title, path):
     # data to be plotted
     x = np.arange(1, len(data) + 1)

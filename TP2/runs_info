@@ -348,3 +348,17 @@ Steps took = 11
 Total Reward = 0.0
 
 *******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_19h22min
+Game: policy_game_midle_sem_erro
+Epsilon: max:1 decay:0.01
+Episodes: 1500; Replay: 2048; Batch size: 1024; Batch resize: 4; Learning rate:0.001
+Train periodicity: 6; update model: 100 stepsDiscount factor: 0.4
+Game: 14x14 with 9 border; food: 10; grass: 0.01 with grow 5e-05
+
+Playing game result:
+Steps took = 26
+Total Reward = -1.0
+
+*******************************************************************************************
