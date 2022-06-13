@@ -9,7 +9,9 @@ N, E, S, W = 0, 1, 2, 3
 
 
 def policy(score, apple, head, tail, direction):
-    return policy1(apple[0], head, direction)
+
+    chosenApple = nearestApple(apple)
+    return policy1(chosenApple, head, direction)
 
 
 def policy1(apple, head, direction):
@@ -62,4 +64,22 @@ def policy1(apple, head, direction):
 
 
     return action
+
+
+def nearestApple(apples, head):
+
+    nearest = apples[0]
+    distance = squareDistance(apples[0], head)
+
+    for apple in apples:
+        dist = squareDistance(apple, head)
+        if dist < distance:
+            nearest = apple
+            distance = dist
+    return nearest
+
+
+def squareDistance(obj1, obj2):
+    return (obj1[0] - obj2[0]) ** 2 + (obj1[1] - obj2[1]) ** 2
+
 
