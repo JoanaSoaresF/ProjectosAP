@@ -281,6 +281,7 @@ if __name__ == '__main__':
         fill_memory_with_policy_moves(replay_memory)
 
         training_episodes(replay_memory)
+        path_plot = f'{GAMES_PATH}{now}{GAME_NAME}'
 
         print("******* Playing game *********")
         game_result = play_trained_model([-1, 0, 1], path, path)

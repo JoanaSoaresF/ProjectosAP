@@ -57,11 +57,13 @@ a cobra na direção certa mas como tal maçã poderia estar em qualquer lado do
 Q3: Explain how you generate the experiences for training your agent. Do not forget to explain the details like the balance between exploitation and exploration, how experiences are selected, what information you store in each experience, how large is the pool of experiences and how frequently are new experiences generated. Justify your choices.
 Q3: Explique como gerou as experiências para treinar seu agente. Não se esqueça de explicar os detalhes como o equilíbrio entre exploração aleatória e guiada (exploration e exploitation), como as experiências são selecionadas, que informação guarda em cada experiência, quão grande é o conjunto de experiências e com que frequência novas experiências são geradas. Justifique estas escolhas.
 R3:
-Para treinar o nosso agente gerámos 1028 experiencias. Iniciamos as mesmas apenas com valores de uma política por forma a ter bastantes exemplos de comer maçãs, mostrar mortes do jogador quando este vai para a maçã
-ignorando os obstáculos no caminho (o próprio corpo). Depois de gerar os exemplos iniciais começamos o treino propriamente dito. Começamos com uma probabilidade de 20% de seguir a política e dentro dos restantes 80%
-temos uma probabilidade decrescente durante o treino, variando de 100% a 15%, de seguir uma heuristica aleatória, de exploração (P(exploration) = 0.8 * x, 15 <= x <= 100). Por fim, se a ação não for de encontro
-a nenhuma das eurísticas anteriores iremos por em prática o conhecimento adquirido pelo nosso agente (P(exploitation) = 0.8 * (1-x), 15 <= x <= 100).
-Durante o treino e porque consideramos insuficiente que o agente siga a política apenas com esta probabilidade inserimos uma nova condição.
+Para treinar o nosso agente começamos por gerar 1028 experiencias. Iniciamos as mesmas apenas com valores de uma política por forma a ter bastantes exemplos de comer maçãs, mostrar mortes do jogador quando este vai para a maçã
+ignorando os obstáculos no caminho (o próprio corpo). Depois de gerar os exemplos iniciais começamos o treino propriamente dito.
+Para a exploração temos uma probabilidade decrescente durante o treino, variando de 100% a 5%. Se não for uma ação de exploração iremos por em prática o conhecimento adquirido pelo nosso agente usando as suas previsões de qual a melhor ação.
+Para garantir que a memória continua com exemplos relevantes da cobra a comer maças, a cada 10 episódios é feito um jogo udando completamente a heurística.
+
+Aquando de selecionar as experiências, nós escolhemos guardar todas visto que o nosso conjunto gerado nos pareceu diversificado o suficiente. Para cada experiência guardamos o estado atual do tabuleiro, a ação tomada, a reward associada a essa ação, o novo estado do tabuleiro e o estado do jogo, se acabou ou não.
+Guardamos numa replay memory as últimas 50000 experiências e temos um batch size de 1024 sendo necessário pelo menos 2048 exemplos iniciais (preenchidos seguindo a política implementada).
 
 
 
@@ -71,6 +73,13 @@ Q4: Explain how you trained your agent: the algorithm used, the discount factor 
 Q4: Explique como treinou o seu agente: o algoritmo utilizado, o factor de desconto (gama), a coordenação da geração de novas experiências e treinao do agente, e outras técnicas que tenha usado. Justifique suas escolhas e explique que alternativas testou e como validou experimentalmente estas escolhas.
 R4:
 
+Escolhemos utilizar um algoritmo de q-learning, ou seja, o agente vai aprender a q-function para os diferentes estados do jogo. Esta função é o resultado esperado, a reward esperada para a melhor ação que podemos tomar tendo em conta o estado atual (sendo o estado seguinte consideracom com um desconto de gamma). Assim o agente terá de aprender esta função de forma a tomar a melhor decisão, decidir pela ação cuja reward esperada é mais elevada. Nós escolhemos aplicar um gamma de 0.4 que se demonstrou como a melhor opção durante as nossas execussões.
+O nosso agente é treinado a cada 6 passos, e o nosso base model é atualizado a cada 100 passos. Estes valores não foram inteiramente aleatórios, foram baseados em exemplos das aulas assim como modificados por experimentação, achamos que o número de passos a que o nosso agente seria treinado ser 6 revelou um melhor equilíbrio entre estes dois valores, e tal fez-se notar durante o treino.
+
 Q5: Discuss this problem and your solution, describing the agent's performance (score, survival, etc.), which aspects of the game were most difficult for the agent to learn, how you tried to remedy these difficulties and what ideas you might have tried if you had more time.
 Q5: Discuta este problema e a sua solução, descrevendo o desempenho do agente (pontuação, sobrevivência, etc), que aspectos do jogo foram mais difíceis de aprender para o agente, como tentou colmatar essas dificuldades e que ideias ficaram que poderia experimentar se tivesse mais tempo.
 R5:
+Entendemos que a nossa solução não teve os melhores resultados, embora durante o treino os nossos resultados fossem aceitáveis e até considerados bons, quando avaliámos a performance da rede num jogo ela deixava bastante a desejar. Enquanto que em treino o número de passos era de média em torno de 30 (verificando-se muitos acima de 100), na execussão com a rede treinada poucos foram os jogos em que o agente realizou 20 passos. Em relação à pontuação, embora em treino fosse habitual valores superiores a 20 (chegando em muitos episódios, não corridos pela política, a 50), quando realizamos a avaliação da rede raros foram os jogos em que saíssemos de 0.
+Assim, de início conseguimos encontrar redes que não morriam, no entanto, estas também não procuravam maçãs ou melhores rewards, a fim de resolver este problema procurámos a implementação de uma política que procurasse aumentar a pontuação, o que correu bem no treino mas teve resultados menos significativos durante a execussão, dificultando também a aprendizagem de sobrevivência.
+
+Como conclusão achamos que deveríamos implementar algum tipo de filtro que facilite o foco do agente em elementos proximos de si, sejam estes elementos positivos como maçãs ou relva, sejam eles o próprio corpo ou uma parede, elementos a evitar. Talvez desta forma, e com este foco o agente fosse mais facilmente treinado e não ficasse tão "confuso" com toda a informação que recebe.
