@@ -84,3 +84,57 @@ Playing game result:
 Steps took = 9
 Total Reward = -1.0
 *******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_08h58min
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.07 with grow 0.001
+
+Playing game result:
+Steps took = 16
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_09h16min
+Game: cnn_agent_game_grass_on_shuffle_offEpsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 1028; Batch size: 512; Learning rate:0.003
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 26
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_10h23min
+Game: cnn_agent_game_grass_on_3dense
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.002
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 500
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_10h29min
+Game: cnn_agent_game_grass_on_3dense_4batch
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.002
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 10
+Total Reward = -1.0
+
+*******************************************************************************************

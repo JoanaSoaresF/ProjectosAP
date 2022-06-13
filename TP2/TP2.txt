@@ -22,7 +22,8 @@ Q1; Explique e justifique a arquitectura do seu agente, descrevendo a rede, os v
 R1:
 Como o estado do nosso agente consiste numa imagem do board de jogo, o nosso agente tem que conseguir identificar e extrair as features certas para representar o board. Sendo assim usamos uma CNN para implementar o nosso agente, com três camada de convulsão e MaxPolling seguidas de três dense layers.
 A ultima camada do agente é uma dense layer com 3 neurónios, correpondendo às três ações possíveis. Esta útlima camada tem ativação linear dado que se trata de um problema de regressão: estamos a tentar aproximas a Q-function para determinar a melhor ação. Assim, a parte de convulsão destina-se a extrair as melhores features do input para serem utilizadas no treino e a parte de dense layers destina-se a aproximar a Q-function.
-Experimentamos várias combinações destas camadas mas menos camadas dificultavam a aproximação da Q-function, sendo que não obtivemos bons resultados. Sendo assim temos três convolution blocks (que são duas Convolutional layers seguidas de MaxPooling) com 64, 32 e 16 filtros e
+Experimentamos várias combinações destas camadas mas menos camadas dificultavam a aproximação da Q-function, sendo que não obtivemos bons resultados. Sendo assim temos três convolution blocks (que são duas Convolutional layers seguidas de MaxPooling) com 64, 32 e 16 filtros e três camadas dense com 128, 64 e 32 neurónios.
+
 Experimentamos ter batchnormalizaton entre as camada, porém os resultados que obtivemos não foram os melhores. Possivelmente porque as imagens de input tem pouca diferença entre elas e talvez a batch normalization esconda essas diferenças de modo a que o treino seja mais difícil. //NOTE
 
 

@@ -26,7 +26,7 @@ from snake_game import SnakeGame
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("_%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'cnn_agent_game_grass_on_shuffle_off'
+GAME_NAME = 'cnn_agent_game_grass_on_3dense'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
@@ -36,13 +36,13 @@ PLOT_TRAIN = False
 
 # Parameters
 MAX_EPSILON = 1
-MIN_EPSILON = 0.1
+MIN_EPSILON = 0.15
 DECAY = 0.025
 MIN_REPLAY_SIZE = 1028
-TRAIN_EPISODES = 1000
+TRAIN_EPISODES = 500
 DISCOUNT_FACTOR = 0.8
 BATCH_SIZE = 512
-LEARNING_RATE = 0.003
+LEARNING_RATE = 0.002
 
 # GAME PARAMETERS
 BOARD_DIM = 14
@@ -114,7 +114,7 @@ def train_agent(replay_memory, model, target_model):
         X.append(observation)
         Y.append(current_qs)
 
-    model.fit(np.array(X), np.array(Y), batch_size=int(BATCH_SIZE), verbose=1, shuffle=False)
+    model.fit(np.array(X), np.array(Y), batch_size=int(BATCH_SIZE), verbose=0, shuffle=True)
 
 
 def training_episodes():
@@ -151,7 +151,6 @@ def training_episodes():
 
         done = False
         step = 0
-        decay_epsilon = False
         exploit_actions = []
 
         while not done:
@@ -188,8 +187,6 @@ def training_episodes():
                     (steps_to_update_target_model % 4 == 0 or done):
                 # The model is trained only once there are enough examples in the experience pool. Once that
                 # condition is met, the model is trained every four steps
-
-                decay_epsilon = True
                 train_agent(replay_memory, model, target_model)
 
             if done:
@@ -203,8 +200,7 @@ def training_episodes():
                     steps_to_update_target_model = 0
                 break
 
-        if decay_epsilon:
-            epsilon = MIN_EPSILON + (MAX_EPSILON - MIN_EPSILON) * np.exp(-DECAY * episode)
+        epsilon = MIN_EPSILON + (MAX_EPSILON - MIN_EPSILON) * np.exp(-DECAY * episode)
 
         steps_statistics.append(step)
         reward_statistics.append(total_training_rewards)
