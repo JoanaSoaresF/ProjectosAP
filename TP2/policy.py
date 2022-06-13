@@ -9,14 +9,13 @@ N, E, S, W = 0, 1, 2, 3
 
 
 def policy(score, apple, head, tail, direction):
-
     chosenApple = nearestApple(apple)
     return policy1(chosenApple, head, direction)
 
 
 def policy1(apple, head, direction):
     """
-        This policy goes staight to the apple ignoring direction to the walls, its own body and everything else
+        This policy goes straight to the apple ignoring direction to the walls, its own body and everything else
         just like an angry bull running towards a red cape
     """
 
@@ -24,12 +23,12 @@ def policy1(apple, head, direction):
 
     if apple[0] > head[0]:  # apple is lower than snake's head (S)
         if direction == N:
-            action = TURN_LEFT  #pode bater na parede
+            action = TURN_LEFT  # pode bater na parede
         elif direction == E:
             action = TURN_RIGHT
         elif direction == S:
             action = FORWARD
-        else: # W
+        else:  # W
             action = TURN_LEFT
 
     elif apple[0] < head[0]:  # apple is higher than snake's head (N)
@@ -37,9 +36,9 @@ def policy1(apple, head, direction):
             action = FORWARD
         elif direction == E:
             action = TURN_LEFT
-        elif direction == S: #pode bater na parede
+        elif direction == S:  # pode bater na parede
             action = TURN_RIGHT
-        else: # W
+        else:  # W
             action = TURN_RIGHT
 
     elif apple[1] > head[1]:  # apple is at the same height but to the snake's head East(Right)
@@ -50,23 +49,22 @@ def policy1(apple, head, direction):
         elif direction == S:
             action = TURN_LEFT
         else:  # W
-            action = TURN_LEFT  #pode bater na parede
+            action = TURN_LEFT  # pode bater na parede
 
     elif apple[1] < head[1]:  # apple is at the same height but to the snake's head West(Left)
         if direction == N:
             action = TURN_LEFT
         elif direction == E:
-            action = TURN_LEFT  #pode bater na parede
+            action = TURN_LEFT  # pode bater na parede
         elif direction == S:
             action = TURN_RIGHT
-        else: # W
+        else:  # W
             action = FORWARD
 
     return action
 
 
 def nearestApple(apples, head):
-
     nearest = apples[0]
     distance = squareDistance(apples[0], head)
 
@@ -80,5 +78,3 @@ def nearestApple(apples, head):
 
 def squareDistance(obj1, obj2):
     return (obj1[0] - obj2[0]) ** 2 + (obj1[1] - obj2[1]) ** 2
-
-
