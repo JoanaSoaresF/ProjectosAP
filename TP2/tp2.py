@@ -27,33 +27,36 @@ from snake_game import SnakeGame
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'policy_3CNN_4DENSE_policy_probability'
+GAME_NAME = 'policy_game_midle_sem_erro'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
 
 # PLOT OPTION
 PLOT_TRAIN = False
+TRAIN = True
+NUM_GAMES = 10
+CHOSEN_MODEL = f'2022-06-13_17h07minpolicy_3CNN_4DENSE_policy_probability'
 
 # Parameters
-TRAIN_PERIODICITY = 0.2
-POLICY_PERIODICITY = 6
+TRAIN_PERIODICITY = 6
+# POLICY_PERIODICITY =
 MAX_EPSILON = 1
-MIN_EPSILON = 0.10
-DECAY = 0.020
-MIN_REPLAY_SIZE = 4000
-TRAIN_EPISODES = 1000
-DISCOUNT_FACTOR = 0.8
+MIN_EPSILON = 0.05
+DECAY = 0.01
+MIN_REPLAY_SIZE = 2048
+TRAIN_EPISODES = 1500
+DISCOUNT_FACTOR = 0.4
 BATCH_SIZE = 1024
 BATCH_RESIZE = 4
-LEARNING_RATE = 0.01
-UPDATE_MODEL = 50
+LEARNING_RATE = 0.001
+UPDATE_MODEL = 100
 
 # GAME PARAMETERS
 BOARD_DIM = 14
 BORDER = 9
 FOOD = 10
-GRASS_GROW = 0.0001
+GRASS_GROW = 0.00005
 MAX_GRASS = 0.01
 
 VERSION_INFORMATION = f'\n*******************************************************************************************\n' \
@@ -61,7 +64,7 @@ VERSION_INFORMATION = f'\n******************************************************
                       f'Game: {GAME_NAME}\n' \
                       f'Epsilon: max:{MAX_EPSILON} decay:{DECAY}\n' \
                       f'Episodes: {TRAIN_EPISODES}; Replay: {MIN_REPLAY_SIZE}; Batch size: {BATCH_SIZE}; Batch resize: {BATCH_RESIZE}; Learning rate:{LEARNING_RATE}\n' \
-                      f'Train periodicity: {TRAIN_PERIODICITY}; Policy periodicity:{POLICY_PERIODICITY}\n; update model: {UPDATE_MODEL} steps' \
+                      f'Train periodicity: {TRAIN_PERIODICITY}; update model: {UPDATE_MODEL} steps' \
                       f'Discount factor: {DISCOUNT_FACTOR}\n' \
                       f'Game: {BOARD_DIM}x{BOARD_DIM} with {BORDER} border; food: {FOOD}; grass: {MAX_GRASS} with grow {GRASS_GROW}\n'
 
@@ -73,9 +76,9 @@ def agent(state_shape):
 
     # convolutional layers stacked
     # convolutional_layer = convolution_stack_layer(inputs, 128, (2, 2))
-    convolutional_layer = convolution_stack_layer(inputs, 64, (2, 2))
+    convolutional_layer = convolution_stack_layer(inputs, 16, (2, 2))
     convolutional_layer = convolution_stack_layer(convolutional_layer, 32, (2, 2))
-    convolutional_layer = convolution_stack_layer(convolutional_layer, 16, (2, 2))
+    # convolutional_layer = convolution_stack_layer(convolutional_layer, 16, (2, 2))
 
     # Flatten before dense layers
     layer = Flatten()(convolutional_layer)
@@ -86,8 +89,6 @@ def agent(state_shape):
     layer = dense_block(layer, 64, dropout=False)
     layer = dense_block(layer, 32, dropout=False)
     # layer = dense_block(layer, 16, dropout=False)
-
-    init = HeUniform()
 
     output = Dense(3)(layer)
 
@@ -163,11 +164,10 @@ def training_episodes(replay_memory):
             # board = snake_game.board_state()
 
             random_number = np.random.rand()
-            random_policy = np.random.rand()
             # 2. Explore using the Epsilon Greedy Exploration Strategy
 
-            if random_policy <= POLICY_PERIODICITY:
-                # Follow policy every POLICY_PERIODICITY steps
+            if episode % 10 == 0:
+                # one game played by policy every ten episodes
                 tag = "Policy"
                 score, apple, head, tail, direction = snake_game.get_state()
                 action = policy(score, apple, head, tail, direction)
@@ -224,26 +224,26 @@ def training_episodes(replay_memory):
     plot_statistics(reward_statistics, "Rewards", f'{path}/rewards.png')
 
 
-def play_trained_model(action_space):
-    path = f'{WEIGHTS_PATH}{now}{GAME_NAME}'
-    model = load_model(path)
+def play_trained_model(action_space, model_path, plot_path):
+    print(model_path)
+    print(plot_path)
+    model = load_model(model_path)
     done = False
-    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD,
+    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD/2,
                            border=BORDER, grass_growth=0,
                            max_grass=0)
     step = 1
     board = snake_game.board_state()
     total_reward = 0
 
-    game_folder = f"{GAMES_PATH}{now}{GAME_NAME}/"
-    create_folders(game_folder)
+    create_folders(plot_path)
 
     while not done:
         reshaped = np.reshape(board, (-1, 32, 32, 3))
         predicted = model.predict(reshaped).flatten()
         action = action_space[np.argmax(predicted)]
         board, reward, done, _ = snake_game.step(action)
-        plot_board(f"{game_folder}{step}.png", board, f"step = {step}")
+        plot_board(f"{plot_path}{step}.png", board, f"step = {step}")
         total_reward += reward
         step += 1
         if step == 500:
@@ -255,7 +255,7 @@ def play_trained_model(action_space):
 
 
 def fill_memory_with_policy_moves(replay_memory):
-    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=int(FOOD / 2),
+    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=int(FOOD),
                            border=BORDER, grass_growth=GRASS_GROW,
                            max_grass=MAX_GRASS)
 
@@ -274,17 +274,25 @@ def fill_memory_with_policy_moves(replay_memory):
 if __name__ == '__main__':
     print(VERSION_INFORMATION)
 
-    replay_memory = deque(maxlen=100_000)
+    replay_memory = deque(maxlen=50000)
 
-    fill_memory_with_policy_moves(replay_memory)
+    if TRAIN:
+        path = f'{WEIGHTS_PATH}{now}{GAME_NAME}'
+        fill_memory_with_policy_moves(replay_memory)
 
-    training_episodes(replay_memory)
+        training_episodes(replay_memory)
 
-    print("******* Playing game *********")
-    game_result = play_trained_model([-1, 0, 1])
+        print("******* Playing game *********")
+        game_result = play_trained_model([-1, 0, 1], path, path)
 
-    game_string = f"Playing game result:\n{game_result}\n"
-    end = f'*******************************************************************************************\n'
-    f = open("runs_info", "a")
-    f.write(f"{VERSION_INFORMATION}\n{game_string}\n{end}")
-    f.close()
+        game_string = f"Playing game result:\n{game_result}\n"
+        end = f'*******************************************************************************************\n'
+        f = open("runs_info", "a")
+        f.write(f"{VERSION_INFORMATION}\n{game_string}\n{end}")
+        f.close()
+    else:
+        for game in range(NUM_GAMES):
+            print(f"******* Playing game {game} *********")
+            game_result = play_trained_model([-1, 0, 1], f'{WEIGHTS_PATH}{CHOSEN_MODEL}/',
+                                             f'{GAMES_PATH}{CHOSEN_MODEL}-{game}/')
+            print(f'********************************************\n')

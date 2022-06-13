@@ -303,3 +303,48 @@ Steps took = 8
 Total Reward = -1.0
 
 *******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_17h07min
+Game: policy_3CNN_4DENSE_policy_probability
+Epsilon: max:1 decay:0.02
+Episodes: 1000; Replay: 4000; Batch size: 1024; Batch resize: 4; Learning rate:0.01
+Train periodicity: 0.2; Policy periodicity:6
+; update model: 50 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.01 with grow 0.0001
+
+Playing game result:
+Steps took = 11
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_16h01min
+Game: policy_3CNN_4DENSE_fill_first
+Epsilon: max:1 decay:0.02
+Episodes: 1000; Replay: 4000; Batch size: 1024; Batch resize: 4; Learning rate:0.005
+Train periodicity: 5; Policy periodicity:5
+Discount factor: 0.6
+Game: 14x14 with 9 border; food: 10; grass: 0.01 with grow 0.0001
+
+Playing game result:
+Steps took = 15
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_19h02min
+Game: policy_game_midle
+Epsilon: max:1 decay:0.01
+Episodes: 1500; Replay: 2048; Batch size: 1024; Batch resize: 4; Learning rate:0.0001
+Train periodicity: 0.2; Policy periodicity:6
+; update model: 64 stepsDiscount factor: 0.4
+Game: 14x14 with 9 border; food: 10; grass: 0.01 with grow 5e-05
+
+Playing game result:
+Steps took = 11
+Total Reward = 0.0
+
+*******************************************************************************************
