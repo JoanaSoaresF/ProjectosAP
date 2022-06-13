@@ -15,6 +15,7 @@ from tensorflow.keras.losses import Huber
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
+from tensorflow.python.keras.initializers.initializers_v2 import HeUniform
 
 from Utils import plot_statistics, create_folders
 from game_demo import plot_board
@@ -25,7 +26,7 @@ from snake_game import SnakeGame
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("_%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'cnn_agent_game_grass_on'
+GAME_NAME = 'cnn_agent_game_grass_on_shuffle_off'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
@@ -48,10 +49,11 @@ BOARD_DIM = 14
 BORDER = 9
 FOOD = 7
 GRASS_GROW = 0.001
-MAX_GRASS = 0.07
+MAX_GRASS = 0.1
 
 VERSION_INFORMATION = f'\n*******************************************************************************************\n' \
                       f'Running on: {now}\n' \
+                      f'Game: {GAME_NAME}\n' \
                       f'Epsilon: max:{MAX_EPSILON} decay:{DECAY}\n' \
                       f'Episodes: {TRAIN_EPISODES}; Replay: {MIN_REPLAY_SIZE}; Batch size: {BATCH_SIZE}; Learning rate:{LEARNING_RATE}\n' \
                       f'Discount factor: {DISCOUNT_FACTOR}\n' \
@@ -64,9 +66,9 @@ def agent(state_shape):
     inputs = Input(shape=state_shape, name='inputs')
 
     # convolutional layers stacked
-    convolutional_layer = convolution_stack_layer(inputs, 16, (2, 2))
+    convolutional_layer = convolution_stack_layer(inputs, 64, (2, 2))
     convolutional_layer = convolution_stack_layer(convolutional_layer, 32, (2, 2))
-    convolutional_layer = convolution_stack_layer(convolutional_layer, 64, (2, 2))
+    convolutional_layer = convolution_stack_layer(convolutional_layer, 16, (2, 2))
 
     # Flatten before dense layers
     layer = Flatten()(convolutional_layer)
@@ -76,7 +78,9 @@ def agent(state_shape):
     layer = dense_block(layer, 128, dropout=False)
     layer = dense_block(layer, 64, dropout=False)
 
-    output = Dense(3)(layer)
+    init = HeUniform()
+
+    output = Dense(3, kernel_initializer=init, activation='linear')(layer)
 
     model = Model(inputs, output)
     model.summary()
@@ -109,7 +113,7 @@ def train_agent(replay_memory, model, target_model):
         X.append(observation)
         Y.append(current_qs)
 
-    model.fit(np.array(X), np.array(Y), batch_size=int(BATCH_SIZE/4), verbose=1, shuffle=True)
+    model.fit(np.array(X), np.array(Y), batch_size=int(BATCH_SIZE), verbose=1, shuffle=False)
 
 
 def training_episodes():
@@ -244,14 +248,14 @@ def play_trained_model(action_space):
 
 if __name__ == '__main__':
     print(VERSION_INFORMATION)
-    f = open("runs_info", "a")
-    f.write(VERSION_INFORMATION)
 
     training_episodes()
 
     print("******* Playing game *********")
     game_result = play_trained_model([-1, 0, 1])
 
-    f.write(f"Playing game result:\n{game_result}\n")
-    f.write(f'*******************************************************************************************\n')
+    game_string = f"Playing game result:\n{game_result}\n"
+    end = f'*******************************************************************************************\n'
+    f = open("runs_info", "a")
+    f.write(f"{VERSION_INFORMATION}\n{game_string}\n{end}")
     f.close()
