@@ -6,7 +6,7 @@
 # ##############################################################################
 
 from tensorflow.keras.initializers import HeUniform
-from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Activation, Dropout, BatchNormalization
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Activation, Dropout
 
 
 def convolution_stack_layer(inputs, filters, kernel_size):
@@ -22,14 +22,12 @@ def convolution_stack_layer(inputs, filters, kernel_size):
 
     """
 
-    init = HeUniform()
-
-    layer = Conv2D(filters, kernel_size, padding="same", kernel_initializer=init)(inputs)
+    layer = Conv2D(filters, kernel_size, padding="same")(inputs)
     layer = Activation("relu")(layer)
     # Use batch normalization after activation so that input of following layer is standardized
     # layer = BatchNormalization()(layer)
 
-    layer = Conv2D(filters, kernel_size, padding="same", kernel_initializer=init)(layer)
+    layer = Conv2D(filters, kernel_size, padding="same")(layer)
     layer = Activation("relu")(layer)
     # layer = BatchNormalization()(layer)
     pool = MaxPooling2D()(layer)

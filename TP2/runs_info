@@ -138,3 +138,168 @@ Steps took = 10
 Total Reward = -1.0
 
 *******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_12h06min
+Game: cnn_agent_3dense_policy_5steps
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.002
+Train periodicity: 10
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 8
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_12h23min
+Game: cnn_agent_3dense_policy_5steps_20
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.001
+Train periodicity: 20
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 8
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_12h26min
+Game: cnn_agent_3dense_policy_5steps_4
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.001
+Train periodicity: 4
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 13
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_12h41min
+Game: cnn_agent_3dense_policy_and_random
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.001
+Train periodicity: 4
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 12
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_13h05min
+Game: cnn_agent_3dense_policy_and_random_reverse
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.001
+Train periodicity: 4
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 19
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: _2022-06-13_13h33min
+Game: cnn_agent_3dense_policy_5stepsAction
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.001
+Train periodicity: 4
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 6
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_14h02min
+Game: policy_4CNN_4DENSE
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.003
+Train periodicity: 20; Policy periodicity:20
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0.1 with grow 0.001
+
+Playing game result:
+Steps took = 9
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_14h06min
+Game: policy_4CNN_4DENSE_no_grass
+Epsilon: max:1 decay:0.025
+Episodes: 500; Replay: 1028; Batch size: 512; Learning rate:0.003
+Train periodicity: 20; Policy periodicity:5
+Discount factor: 0.8
+Game: 14x14 with 9 border; food: 7; grass: 0 with grow 0
+
+Playing game result:
+Steps took = 24
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_14h39min
+Game: policy_3CNN_4DENSE_no_grass_reverse_bigger
+Epsilon: max:1 decay:0.02
+Episodes: 1000; Replay: 4112; Batch size: 1028; Batch resize: 4; Learning rate:0.001
+Train periodicity: 10; Policy periodicity:5
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0 with grow 0
+
+Playing game result:
+Steps took = 5
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_14h27min
+Game: policy_4CNN_4DENSE_no_grass
+Epsilon: max:1 decay:0.02
+Episodes: 1000; Replay: 2056; Batch size: 1028; Learning rate:0.001
+Train periodicity: 10; Policy periodicity:5
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0 with grow 0
+
+Playing game result:
+Steps took = 500
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-13_15h02min
+Game: policy_3CNN_2DENSE_random_init_with_policy
+Epsilon: max:1 decay:0.02
+Episodes: 500; Replay: 4112; Batch size: 1028; Batch resize: 4; Learning rate:0.001
+Train periodicity: 10; Policy periodicity:5
+Discount factor: 0.4
+Game: 14x14 with 9 border; food: 7; grass: 0 with grow 0
+
+Playing game result:
+Steps took = 8
+Total Reward = -1.0
+
+*******************************************************************************************
