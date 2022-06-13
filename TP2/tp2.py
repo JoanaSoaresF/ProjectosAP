@@ -154,7 +154,6 @@ def training_episodes():
 
         done = False
         step = 0
-        exploit_actions = []
 
         while not done:
             steps_to_update_target_model += 1
@@ -168,6 +167,7 @@ def training_episodes():
                 action = policy(score, apple, head, tail, direction)
             else:
                 if step % 10 == 0:
+                    # Follow policy
                     tag = "Policy"
                     score, apple, head, tail, direction = snake_game.get_state()
                     action = policy(score, apple, head, tail, direction)
@@ -183,7 +183,6 @@ def training_episodes():
                     reshaped = np.reshape(board, (-1, 32, 32, 3))
                     predicted = model.predict(reshaped).flatten()
                     action = action_space[np.argmax(predicted)]
-                    exploit_actions.append(action)
 
             new_board_state, reward, done, score_dict = snake_game.step(action)
             replay_memory.append([board, action, reward, new_board_state, done])
