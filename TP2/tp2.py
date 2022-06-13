@@ -77,6 +77,7 @@ def agent(state_shape):
     # layer = dense_block(layer, 256, dropout=False)
     layer = dense_block(layer, 128, dropout=False)
     layer = dense_block(layer, 64, dropout=False)
+    layer = dense_block(layer, 32, dropout=False)
 
     init = HeUniform()
 
