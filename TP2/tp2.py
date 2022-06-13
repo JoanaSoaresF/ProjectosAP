@@ -17,6 +17,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.python.keras.initializers.initializers_v2 import HeUniform
 
+from TP2.policy import policy
 from Utils import plot_statistics, create_folders
 from game_demo import plot_board
 from network_utils import convolution_stack_layer, dense_block
@@ -26,7 +27,7 @@ from snake_game import SnakeGame
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("_%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'cnn_agent_game_grass_on_3dense'
+GAME_NAME = 'cnn_agent_3dense_policy'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
@@ -35,6 +36,7 @@ PLOTS_PATH = './plots/'
 PLOT_TRAIN = False
 
 # Parameters
+TRAIN_PERIODICITY = 10
 MAX_EPSILON = 1
 MIN_EPSILON = 0.15
 DECAY = 0.025
@@ -56,6 +58,7 @@ VERSION_INFORMATION = f'\n******************************************************
                       f'Game: {GAME_NAME}\n' \
                       f'Epsilon: max:{MAX_EPSILON} decay:{DECAY}\n' \
                       f'Episodes: {TRAIN_EPISODES}; Replay: {MIN_REPLAY_SIZE}; Batch size: {BATCH_SIZE}; Learning rate:{LEARNING_RATE}\n' \
+                      f'Train periodicity: {TRAIN_PERIODICITY}\n' \
                       f'Discount factor: {DISCOUNT_FACTOR}\n' \
                       f'Game: {BOARD_DIM}x{BOARD_DIM} with {BORDER} border; food: {FOOD}; grass: {MAX_GRASS} with grow {GRASS_GROW}\n'
 
@@ -159,19 +162,28 @@ def training_episodes():
 
             random_number = np.random.rand()
             # 2. Explore using the Epsilon Greedy Exploration Strategy
-            if random_number <= epsilon:
-                # Explore
-                # action = env.action_space.sample()
-                tag = "Explore"
-                action = random.sample(action_space, 1)[0]
+            if len(replay_memory) >= MIN_REPLAY_SIZE:
+                tag = "Policy"
+                score, apple, head, tail, direction = snake_game.get_state()
+                action = policy(score, apple, head, tail, direction)
             else:
-                # Exploit best known action
-                # model dims are (batch, env.observation_space.n)
-                tag = "Exploit"
-                reshaped = np.reshape(board, (-1, 32, 32, 3))
-                predicted = model.predict(reshaped).flatten()
-                action = action_space[np.argmax(predicted)]
-                exploit_actions.append(action)
+                if step % 10 == 0:
+                    tag = "Policy"
+                    score, apple, head, tail, direction = snake_game.get_state()
+                    action = policy(score, apple, head, tail, direction)
+                elif random_number <= epsilon:
+                    # Explore
+                    # action = env.action_space.sample()
+                    tag = "Explore"
+                    action = random.sample(action_space, 1)[0]
+                else:
+                    # Exploit best known action
+                    # model dims are (batch, env.observation_space.n)
+                    tag = "Exploit"
+                    reshaped = np.reshape(board, (-1, 32, 32, 3))
+                    predicted = model.predict(reshaped).flatten()
+                    action = action_space[np.argmax(predicted)]
+                    exploit_actions.append(action)
 
             new_board_state, reward, done, score_dict = snake_game.step(action)
             replay_memory.append([board, action, reward, new_board_state, done])
@@ -184,7 +196,7 @@ def training_episodes():
             # 3. Update the Main Network using the Bellman Equation
 
             if len(replay_memory) >= MIN_REPLAY_SIZE and \
-                    (steps_to_update_target_model % 4 == 0 or done):
+                    (steps_to_update_target_model % TRAIN_PERIODICITY == 0 or done):
                 # The model is trained only once there are enough examples in the experience pool. Once that
                 # condition is met, the model is trained every four steps
                 train_agent(replay_memory, model, target_model)
