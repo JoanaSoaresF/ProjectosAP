@@ -4,17 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0bbf04d-8afe-4ace-81fe-eed235701a00" name="Changes" comment="Assignment 2 - politica corre com x probabilidade">
-      <change afterPath="$PROJECT_DIR$/TP2/examples/cicle.gif" afterDir="false" />
+    <list default="true" id="e0bbf04d-8afe-4ace-81fe-eed235701a00" name="Changes" comment="Assignment 2 - final">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP2/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/.idea/TP2.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/TP2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/TP2/TP2.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP2/Utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/TP2/Utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/runs_info" beforeDir="false" afterPath="$PROJECT_DIR$/TP2/runs_info" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TP2/tp2.py" beforeDir="false" afterPath="$PROJECT_DIR$/TP2/tp2.py" afterDir="false" />
     </list>
@@ -106,6 +104,8 @@
       <workItem from="1651957897225" duration="3750000" />
       <workItem from="1655152860156" duration="1038000" />
       <workItem from="1655154025395" duration="2606000" />
+      <workItem from="1655156883632" duration="49000" />
+      <workItem from="1655186820707" duration="14327000" />
     </task>
     <task id="LOCAL-00001" summary="Question 6, needs review">
       <created>1651966022730</created>
@@ -177,7 +177,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655140202728</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Assignment 2 - final">
+      <created>1655156923672</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1655156923672</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,14 +209,15 @@
     <MESSAGE value="Assignment 2 - policy in training" />
     <MESSAGE value="Assignment 2 - correção política" />
     <MESSAGE value="Assignment 2 - politica corre com x probabilidade" />
-    <option name="LAST_COMMIT_MESSAGE" value="Assignment 2 - politica corre com x probabilidade" />
+    <MESSAGE value="Assignment 2 - final" />
+    <option name="LAST_COMMIT_MESSAGE" value="Assignment 2 - final" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/TP2/tp2.py</url>
-          <line>92</line>
+          <line>91</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>

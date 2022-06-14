@@ -362,3 +362,73 @@ Steps took = 26
 Total Reward = -1.0
 
 *******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-14_08h54min
+Game: menos_policy_fill_random
+Epsilon: max:1 decay:0.01
+Episodes: 1000; Replay: 2048; Batch size: 1024; Batch resize: 4; Learning rate:0.003
+Train periodicity: 6; update model: 100 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.05 with grow 0.001
+
+Playing game result:
+Steps took = 77
+Total Reward = 5.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-14_10h28min
+Game: menos_policy_fill_random
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 4000; Batch size: 512; Batch resize: 2; Learning rate:0.003
+Train periodicity: 4;Policy periodicity: 20; update model: 100 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.05 with grow 0.0001
+
+Playing game result:
+Steps took = 9
+Total Reward = -1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-14_11h22min
+Game: menos_policy_fill_random_half
+Epsilon: max:1 decay:0.025
+Episodes: 1000; Replay: 5000; Batch size: 1028; Batch resize: 4; Learning rate:0.003
+Train periodicity: 4;Policy periodicity: 20; update model: 100 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.05 with grow 0.0001
+
+Playing game result:
+Steps took = 29
+Total Reward = 0.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-14_11h31min
+Game: fill_half_random_half_policy_bigger_batch
+Epsilon: max:1 min:0.1 decay:0.01
+Episodes: 1000; Replay: 5000; Batch size: 2048; Batch resize: 8; Learning rate:0.003
+Train periodicity: 4;Policy periodicity: 20; update model: 100 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.05 with grow 0.001
+
+Playing game result:
+Steps took = 16
+Total Reward = 1.0
+
+*******************************************************************************************
+
+*******************************************************************************************
+Running on: 2022-06-14_13h33min
+Game: fill_all_random_bigger_batch
+Epsilon: max:1 min:0.1 decay:0.01
+Episodes: 1000; Replay: 5000; Batch size: 2048; Batch resize: 8; Learning rate:0.003
+Train periodicity: 4;Policy periodicity: 10; update model: 100 stepsDiscount factor: 0.8
+Game: 14x14 with 9 border; food: 10; grass: 0.05 with grow 0.001
+
+Playing game result:
+Steps took = 42
+Total Reward = 0.0
+
+*******************************************************************************************

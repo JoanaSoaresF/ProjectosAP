@@ -15,7 +15,6 @@ from tensorflow.keras.losses import Huber
 from tensorflow.keras.models import Model
 from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
-from tensorflow.python.keras.initializers.initializers_v2 import HeUniform
 
 from Utils import plot_statistics, create_folders
 from game_demo import plot_board
@@ -27,7 +26,7 @@ from snake_game import SnakeGame
 DRIVE_PATH = '/content/drive/MyDrive/2ºSemestre/Aprendizagem Profunda/ProjectosAP/TP2'
 now = datetime.utcnow().strftime("%Y-%m-%d_%Hh%Mmin")
 WEIGHTS_PATH = './weights/'
-GAME_NAME = 'policy_game_midle_sem_erro'
+GAME_NAME = 'menos_policy_fill_random'
 GAMES_PATH = './games/'
 TRAIN_PATH = './train/'
 PLOTS_PATH = './plots/'
@@ -36,35 +35,35 @@ PLOTS_PATH = './plots/'
 PLOT_TRAIN = False
 TRAIN = True
 NUM_GAMES = 10
-CHOSEN_MODEL = f'2022-06-13_17h07minpolicy_3CNN_4DENSE_policy_probability'
+CHOSEN_MODEL = f'2022-06-14_08h54minmenos_policy_fill_random'
 
 # Parameters
 TRAIN_PERIODICITY = 6
-# POLICY_PERIODICITY =
+POLICY_PERIODICITY = 10
 MAX_EPSILON = 1
-MIN_EPSILON = 0.05
+MIN_EPSILON = 0.1
 DECAY = 0.01
 MIN_REPLAY_SIZE = 2048
-TRAIN_EPISODES = 1500
-DISCOUNT_FACTOR = 0.4
+TRAIN_EPISODES = 1000
+DISCOUNT_FACTOR = 0.8
 BATCH_SIZE = 1024
 BATCH_RESIZE = 4
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.003
 UPDATE_MODEL = 100
 
 # GAME PARAMETERS
 BOARD_DIM = 14
 BORDER = 9
 FOOD = 10
-GRASS_GROW = 0.00005
-MAX_GRASS = 0.01
+GRASS_GROW = 0.001
+MAX_GRASS = 0.05
 
 VERSION_INFORMATION = f'\n*******************************************************************************************\n' \
                       f'Running on: {now}\n' \
                       f'Game: {GAME_NAME}\n' \
-                      f'Epsilon: max:{MAX_EPSILON} decay:{DECAY}\n' \
+                      f'Epsilon: max:{MAX_EPSILON} min:{MIN_EPSILON} decay:{DECAY}\n' \
                       f'Episodes: {TRAIN_EPISODES}; Replay: {MIN_REPLAY_SIZE}; Batch size: {BATCH_SIZE}; Batch resize: {BATCH_RESIZE}; Learning rate:{LEARNING_RATE}\n' \
-                      f'Train periodicity: {TRAIN_PERIODICITY}; update model: {UPDATE_MODEL} steps' \
+                      f'Train periodicity: {TRAIN_PERIODICITY};Policy periodicity: {POLICY_PERIODICITY}; update model: {UPDATE_MODEL} steps' \
                       f'Discount factor: {DISCOUNT_FACTOR}\n' \
                       f'Game: {BOARD_DIM}x{BOARD_DIM} with {BORDER} border; food: {FOOD}; grass: {MAX_GRASS} with grow {GRASS_GROW}\n'
 
@@ -76,7 +75,7 @@ def agent(state_shape):
 
     # convolutional layers stacked
     # convolutional_layer = convolution_stack_layer(inputs, 128, (2, 2))
-    convolutional_layer = convolution_stack_layer(inputs, 16, (2, 2))
+    convolutional_layer = convolution_stack_layer(inputs, 64, (2, 2))
     convolutional_layer = convolution_stack_layer(convolutional_layer, 32, (2, 2))
     # convolutional_layer = convolution_stack_layer(convolutional_layer, 16, (2, 2))
 
@@ -84,13 +83,13 @@ def agent(state_shape):
     layer = Flatten()(convolutional_layer)
 
     # Dense layers
-    layer = dense_block(layer, 256, dropout=False)
+    # layer = dense_block(layer, 256, dropout=False)
     layer = dense_block(layer, 128, dropout=False)
     layer = dense_block(layer, 64, dropout=False)
     layer = dense_block(layer, 32, dropout=False)
     # layer = dense_block(layer, 16, dropout=False)
 
-    output = Dense(3)(layer)
+    output = Dense(3, activation='linear')(layer)
 
     model = Model(inputs, output)
     model.summary()
@@ -104,10 +103,10 @@ def agent(state_shape):
 def train_agent(replay_memory, model, target_model):
     mini_batch = random.sample(replay_memory, BATCH_SIZE)
 
-    current_states = np.array([action[0] for action in mini_batch])
+    current_states = np.array([transition[0] for transition in mini_batch])
     current_qs_list = model.predict(current_states)
 
-    new_current_states = np.array([action[3] for action in mini_batch])
+    new_current_states = np.array([transition[3] for transition in mini_batch])
     future_qs_list = target_model.predict(new_current_states)
 
     X = []
@@ -166,7 +165,7 @@ def training_episodes(replay_memory):
             random_number = np.random.rand()
             # 2. Explore using the Epsilon Greedy Exploration Strategy
 
-            if episode % 10 == 0:
+            if episode % POLICY_PERIODICITY == 0:
                 # one game played by policy every ten episodes
                 tag = "Policy"
                 score, apple, head, tail, direction = snake_game.get_state()
@@ -203,7 +202,7 @@ def training_episodes(replay_memory):
             if done:
                 # print(exploit_actions)
                 print('\tTotal training rewards: {} after n steps = {}'.format(
-                    total_training_rewards, step))
+                        total_training_rewards, step))
 
                 if steps_to_update_target_model >= UPDATE_MODEL and len(replay_memory) >= MIN_REPLAY_SIZE:
                     print('\tCopying main network weights to the target network weights')
@@ -253,17 +252,16 @@ def play_trained_model(action_space, model_path, plot_path):
 
 
 def fill_memory_with_policy_moves(replay_memory):
-    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=int(FOOD),
+    action_space = [-1, 0, 1]
+    snake_game = SnakeGame(width=BOARD_DIM, height=BOARD_DIM, food_amount=FOOD,
                            border=BORDER, grass_growth=GRASS_GROW,
                            max_grass=MAX_GRASS)
-
     while len(replay_memory) <= MIN_REPLAY_SIZE:
 
         board, reward, done, score_dict = snake_game.reset()
         done = False
         while not done:
-            score, apple, head, tail, direction = snake_game.get_state()
-            action = policy(score, apple, head, tail, direction)
+            action = random.sample(action_space, 1)[0]
             new_board_state, reward, done, score_dict = snake_game.step(action)
             replay_memory.append([board, action, reward, new_board_state, done])
             board = new_board_state
@@ -272,19 +270,20 @@ def fill_memory_with_policy_moves(replay_memory):
 if __name__ == '__main__':
     print(VERSION_INFORMATION)
 
-    replay_memory = deque(maxlen=50000)
+    replay_memory = deque(maxlen=100000)
 
     if TRAIN:
         path = f'{WEIGHTS_PATH}{now}{GAME_NAME}'
         fill_memory_with_policy_moves(replay_memory)
 
         training_episodes(replay_memory)
-        path_plot = f'{GAMES_PATH}{now}{GAME_NAME}'
 
-        print("******* Playing game *********")
-        game_result = play_trained_model([-1, 0, 1], path, path_plot)
+        for game in range(NUM_GAMES):
+            print(f"******* Playing game {game}*********")
+            path_plot = f'{GAMES_PATH}{now}{GAME_NAME}-{game}/'
+            game_result = play_trained_model([-1, 0, 1], path, path_plot)
 
-        game_string = f"Playing game result:\n{game_result}\n"
+            game_string = f"Playing game result:\n{game_result}\n"
         end = f'*******************************************************************************************\n'
         f = open("runs_info", "a")
         f.write(f"{VERSION_INFORMATION}\n{game_string}\n{end}")
